@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="c580931f-2c61-4a97-9320-8654544b2d74" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:8000/QBServer" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="QBService.wsdl" MetadataType="Wsdl" ID="4833589c-d3e5-4db8-8f6a-9cd885d9883b" SourceId="1" SourceUrl="http://localhost:8000/QBServer?wsdl" />
+    <MetadataFile FileName="QBServer.xsd" MetadataType="Schema" ID="93c25a46-8895-4a87-bda8-58d6f44c6a91" SourceId="1" SourceUrl="http://localhost:8000/QBServer?xsd=xsd1" />
+    <MetadataFile FileName="QBServer.wsdl" MetadataType="Wsdl" ID="f13d7c50-75a4-41e6-87e8-12964c0f4b65" SourceId="1" SourceUrl="http://localhost:8000/QBServer?wsdl=wsdl0" />
+    <MetadataFile FileName="QBServer.disco" MetadataType="Disco" ID="b183ce34-97b2-41c2-8fa7-69f8b2e4a68e" SourceId="1" SourceUrl="http://localhost:8000/QBServer?disco" />
+    <MetadataFile FileName="QBServer1.xsd" MetadataType="Schema" ID="6616defe-0a6d-435d-ace6-1c679b956937" SourceId="1" SourceUrl="http://localhost:8000/QBServer?xsd=xsd0" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

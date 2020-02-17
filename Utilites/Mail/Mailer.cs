@@ -10,6 +10,8 @@ using System.Net;
 using System.Net.Mime;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace CFI.Utility.Mail
 {
@@ -99,7 +101,7 @@ namespace CFI.Utility.Mail
             string ToAddress = AppSettings.GetAppSetting("ToAddress", "");
             if (Mailer.IsValidEmail(ToAddress))
             {
-                Logger.Log(EnLogLevel.DEBUG, String.Format("Adding address: {0}", ToAddress));
+                Logger.Log(LogLevel.Debug, String.Format("Adding address: {0}", ToAddress));
                 ToAddresses.Add(ToAddress);
             }
             FromAddress = AppSettings.GetAppSetting("FromAddress", "");
@@ -113,7 +115,7 @@ namespace CFI.Utility.Mail
         {
         }
 
-        public Mailer(string server, int port, bool useSSL) : this(server, port, useSSL, new NullLogger())
+        public Mailer(string server, int port, bool useSSL) : this(server, port, useSSL, NullLogger.Instance)
         {
         }
 
@@ -145,11 +147,11 @@ namespace CFI.Utility.Mail
         {
             if (String.IsNullOrWhiteSpace(To))
             {
-                Logger.Log(EnLogLevel.ERROR, String.Format("Cannot add an empty To address to email with subject: {0}", Subject));
+                Logger.Log(LogLevel.Error, String.Format("Cannot add an empty To address to email with subject: {0}", Subject));
                 return false;
             }
             ToAddresses.Clear();  // need to clear any existing addresses that may have been added
-            Logger.Log(EnLogLevel.DEBUG, String.Format("Adding address: {0}", To));
+            Logger.Log(LogLevel.Debug, String.Format("Adding address: {0}", To));
             ToAddresses.Add(To);
             return SendMail(Subject, Body, HighPriority, Attachment, ToAddresses, From, DisplayName, AuthAccount, AuthPasswrd, ref errors);
         }
@@ -163,7 +165,7 @@ namespace CFI.Utility.Mail
         {
             if (String.IsNullOrWhiteSpace(To))
             {
-                Logger.Log(EnLogLevel.ERROR, String.Format("Cannot add an empty To address to email with subject: {0}", Subject));
+                Logger.Log(LogLevel.Error, String.Format("Cannot add an empty To address to email with subject: {0}", Subject));
                 return false;
             }
             ToAddresses.Clear();  // need to clear any existing addresses that may have been added
@@ -192,7 +194,7 @@ namespace CFI.Utility.Mail
 					}
 					catch (Exception e)
 					{
-						Logger.LogException(e);
+						Logger.LogCritical(e);
 						Logger.LogError(string.Format("From - {0}", From));
 						return false;
 					}
@@ -208,7 +210,7 @@ namespace CFI.Utility.Mail
 							errors += Environment.NewLine;
 						}
 						errors += e.Message;
-						Logger.LogException(e);
+						Logger.LogCritical(e);
 						Logger.LogError(string.Format("ReplyTo - {0}", From));
 						return false;
 					}
@@ -229,7 +231,7 @@ namespace CFI.Utility.Mail
 									errors += Environment.NewLine;
 								}
 								errors += e.Message;
-								Logger.LogException(e);
+								Logger.LogCritical(e);
 								Logger.LogError(string.Format("CC - {0}", ToAddress));
 								return false;
 							}
@@ -257,7 +259,7 @@ namespace CFI.Utility.Mail
 									errors += Environment.NewLine;
 								}
 								errors += e.Message;
-								Logger.LogException(e);
+								Logger.LogCritical(e);
 								Logger.LogError(string.Format("CC - {0}", CCAddress));
 								return false;
 							}
@@ -296,17 +298,17 @@ namespace CFI.Utility.Mail
 							errors += Environment.NewLine;
 						}
 						errors += ex.Message;
-						Logger.LogException(ex);
+						Logger.LogCritical(ex);
 					}
                 }
                 else
                 {
-                    Logger.Log(EnLogLevel.INFO, "SendMail() - ToAddress, FromAddress, or SMTPServer name was empty.");
+                    Logger.Log(LogLevel.Information, "SendMail() - ToAddress, FromAddress, or SMTPServer name was empty.");
                 }
             }
             catch (Exception e)
             {
-                Logger.LogException(e);
+                Logger.LogCritical(e);
             }
             return retVal;
         }
@@ -325,7 +327,7 @@ namespace CFI.Utility.Mail
             {
 				Logger.LogError(message.ToString());
 				Messages += e.Message;
-				Logger.LogException(e);
+				Logger.LogCritical(e);
             }
             return retVal;
         }

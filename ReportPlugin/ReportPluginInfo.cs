@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Reflection;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using CFI.Utility.Logging;
 
 namespace CFI.InstallationManager.ReportPlugin
@@ -177,7 +178,7 @@ namespace CFI.InstallationManager.ReportPlugin
             }
             catch (Exception ex)
             {
-                logger.LogException(ex);
+                logger.LogCritical(ex);
                 return null;
             }
         }

@@ -1,4 +1,10 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats;
+using SixLabors.ImageSharp.Formats.Png;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.PixelFormats;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -8,7 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using CFI.Utility.Logging;
+//using CFI.Utility.Logging;
 using ZXing;
 
 namespace CFI.Utility.Images
@@ -20,7 +26,7 @@ namespace CFI.Utility.Images
 		/// </summary>
 		/// <param name="str"></param>
 		/// <returns></returns>
-		public static Bitmap ScaleImage(this Image image, int dpi)
+		public static Bitmap ScaleImage(this System.Drawing.Image image, int dpi)
 		{
 			var ratioX = (double)dpi / image.HorizontalResolution;
 			var ratioY = (double)dpi / image.VerticalResolution;
@@ -73,38 +79,43 @@ namespace CFI.Utility.Images
 		{
 			string qrcode = null;
 
-			Result r = null;
+			//using (MemoryStream stream = new MemoryStream())
+			//{
 
-			IBarcodeReader reader = new BarcodeReader();
-			reader.Options.TryHarder = true;
-			reader.Options.PossibleFormats = new List<BarcodeFormat>();
-			reader.Options.PossibleFormats.Add(BarcodeFormat.QR_CODE);
-			int dpi = (int) bm.HorizontalResolution;
-			int originalDpi = dpi;
-			try
-			{
-//				for (int dpi = 20; dpi <= 100; dpi++)
-				{
-//					using (Bitmap bm2 = bm.ScaleImage(dpi))
-					{
-						r = reader.Decode(bm);
-					}
-					if (r != null && r.BarcodeFormat == BarcodeFormat.QR_CODE)
-					{
-						if (logger != null)
-						{
-							logger.Log(EnLogLevel.INFO, string.Format("QRDecode - resolution {0} - {1}", originalDpi, dpi));
-						}
-						System.Console.WriteLine("QRDecode - resolution {0} - {1}", originalDpi, dpi);
-						qrcode = r.Text;
-//						break;
-					}
-				}
-			}
-			catch (Exception)
-			{
-			}
+			//	Result r = null;
 
+			//	Image<Rgba32> image = Image<Rgba32>.Load<Rgba32>(stream);
+
+			//	IBarcodeReader reader = new BarcodeReader();
+			//	reader.Options.TryHarder = true;
+			//	reader.Options.PossibleFormats = new List<BarcodeFormat>();
+			//	reader.Options.PossibleFormats.Add(BarcodeFormat.QR_CODE);
+			//	int dpi = (int)bm.HorizontalResolution;
+			//	int originalDpi = dpi;
+			//	try
+			//	{
+			//		//				for (int dpi = 20; dpi <= 100; dpi++)
+			//		{
+			//			//					using (Bitmap bm2 = bm.ScaleImage(dpi))
+			//			{
+			//				r = reader.Decode(image);
+			//			}
+			//			if (r != null && r.BarcodeFormat == BarcodeFormat.QR_CODE)
+			//			{
+			//				if (logger != null)
+			//				{
+			//					logger.Log(LogLevel.Information, string.Format("QRDecode - resolution {0} - {1}", originalDpi, dpi));
+			//				}
+			//				System.Console.WriteLine("QRDecode - resolution {0} - {1}", originalDpi, dpi);
+			//				qrcode = r.Text;
+			//				//						break;
+			//			}
+			//		}
+			//	}
+			//	catch (Exception)
+			//	{
+			//	}
+			//}
 			return qrcode;
 		}
 	}

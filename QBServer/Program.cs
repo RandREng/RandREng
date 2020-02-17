@@ -59,7 +59,7 @@ namespace RandREng.QBServer
 				{
 					string appDataPath = Application.LocalUserAppDataPath;
 					_logger = new FileLogger(@"c:\temp\", "QBServer");
-					_logger.LogLevel = EnLogLevel.DEBUG;
+					_logger.LogLevel = LogLevel.Debug;
 					QBService.Logger = _logger;
 				}
 				return _logger;
@@ -71,7 +71,7 @@ namespace RandREng.QBServer
 		static public void WriteLine(string line)
 		{
 			Console.WriteLine(line);
-			Logger.Log(EnLogLevel.INFO, line);
+			Logger.Log(LogLevel.Information, line);
 		}
 
 		public static void DisplayHostInfo(ServiceHost h)

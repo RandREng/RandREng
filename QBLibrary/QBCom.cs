@@ -1,4 +1,4 @@
-﻿using CFI.Utility.Logging;
+﻿using Microsoft.Extensions.Logging;
 using RandREng.QBLibrary;
 using System;
 using System.Collections.Generic;

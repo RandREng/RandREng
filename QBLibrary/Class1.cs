@@ -6,8 +6,10 @@ using Interop.QBXMLRP2;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using RandREng.QBLibrary.QBServer;
-using CFI.Utility.Logging;
 using System.ServiceModel;
+using Microsoft.Extensions.Logging;
+using CFI.Utility.Logging;
+
 
 namespace RandREng.QBLibrary
 {
@@ -205,7 +207,7 @@ namespace RandREng.QBLibrary
 			}
 			catch (Exception e)
 			{
-				this.Logger.LogException(e);
+				this.Logger.LogCritical(e);
 			}
 			return temp;
 		}
@@ -226,7 +228,7 @@ namespace RandREng.QBLibrary
 					}
 					catch (Exception e)
 					{
-						this.Logger.LogException(e);
+						this.Logger.LogCritical(e);
 					}
 				}
 				return _maxVersion;
@@ -315,7 +317,7 @@ namespace RandREng.QBLibrary
 				}
 				catch (Exception e)
 				{
-					Logger.LogException(e);
+					Logger.LogCritical(e);
 					DisconnectFromQB();
 				}
 			}
@@ -332,7 +334,7 @@ namespace RandREng.QBLibrary
 				}
 				catch (Exception e)
 				{
-					Logger.LogException(e);
+					Logger.LogCritical(e);
 				}
 			}
 			if (rp != null)
@@ -344,7 +346,7 @@ namespace RandREng.QBLibrary
 				}
 				catch (Exception e)
 				{
-					Logger.LogException(e);
+					Logger.LogCritical(e);
 				}
 			}
 		}
@@ -361,7 +363,7 @@ namespace RandREng.QBLibrary
 			}
 			catch (Exception e)
 			{
-				Logger.LogException(e);
+				Logger.LogCritical(e);
 				return null;
 			}
 		}

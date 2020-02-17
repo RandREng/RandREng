@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading;
 using System.Collections;
 using CFI.Utility.Logging;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace CFI.Utility.Processor
 {
@@ -24,7 +26,7 @@ namespace CFI.Utility.Processor
         protected string EventSource { get { return this.ProcessorName + " - " + this.InstanceName; } }
 
         protected TimerProcessor(string instanceName, string processorName)
-            : this(instanceName, processorName, new NullLogger())
+            : this(instanceName, processorName, NullLogger.Instance)
         {
         }
 
@@ -43,12 +45,12 @@ namespace CFI.Utility.Processor
             this.Init();
             if (this.Processing)
             {
-                Logger.Log(EnLogLevel.INFO, "Processor starting.");
+                Logger.Log(LogLevel.Information, "Processor starting.");
                 this.Thread.Start();
             }
             else
             {
-                Logger.Log(EnLogLevel.INFO, "Processor DISABLED.");
+                Logger.Log(LogLevel.Information, "Processor DISABLED.");
             }
         }
         
@@ -59,18 +61,18 @@ namespace CFI.Utility.Processor
         {
             try
             {
-                Logger.Log(EnLogLevel.INFO, "Processor stopping.");
+                Logger.Log(LogLevel.Information, "Processor stopping.");
                 if (this.Processing)
                 {
                     this.Processing = false;
                     this.PQueue.Produce("quitthread");
                     this.Thread.Join(30000);
                 }
-                Logger.Log(EnLogLevel.INFO, "Processor stopped.");
+                Logger.Log(LogLevel.Information, "Processor stopped.");
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.LogCritical(ex);
             }
         }
 
@@ -106,7 +108,7 @@ namespace CFI.Utility.Processor
                 }
                 delay += this.Stagger;
 #endif
-                Logger.Log(EnLogLevel.INFO, string.Format("Processor starting delay: {0}.", delay));
+                Logger.Log(LogLevel.Information, string.Format("Processor starting delay: {0}.", delay));
 
                 if (delay > 0)
                 {
@@ -128,14 +130,14 @@ namespace CFI.Utility.Processor
                     }
                     catch (Exception e)
                     {
-                        Logger.LogException(e);
+                        Logger.LogCritical(e);
                     }
                 }
-                Logger.Log(EnLogLevel.INFO, "ProcessQueueThread() - Thread procedure stopping.");
+                Logger.Log(LogLevel.Information, "ProcessQueueThread() - Thread procedure stopping.");
             }
             catch (Exception e)
             {
-                Logger.LogException(e);
+                Logger.LogCritical(e);
             }
         }
 

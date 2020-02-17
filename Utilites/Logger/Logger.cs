@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Text;
@@ -7,89 +8,17 @@ using System.Diagnostics;
 
 namespace CFI.Utility.Logging
 {
-    public sealed class Logger
+    public static class Extensions
     {
-
-        //private static volatile ILogger instance;
-
-        private Logger()
+        public static void LogCritical(this ILogger logger, Exception e)
         {
+            logger.LogCritical(e, "");
         }
 
-        //public static ILogger Instance
-        //{
-        //    get
-        //    {
-        //        if (instance == null)
-        //        {
-        //            instance = new NullLogger();
-        //        }
-        //        return instance;
-        //    }
-        //    set
-        //    {
-        //        Logger.instance = value;
-        //    }
-        //}
-
-        public static void WriteEventLog(string Source, Exception ex)
+        public static void Log(this ILogger logger, string message)
         {
-            WriteEventLog(Source, BaseLogger.GetException(ex));
+            logger.Log(LogLevel.Information, message);
         }
-
-        public static void WriteEventLog(string Source, string Message)
-        {
-            try
-            {
-                if (!System.Diagnostics.EventLog.SourceExists(Source))
-                {
-                    System.Diagnostics.EventLog.CreateEventSource(Source, "Application");
-                }
-
-                EventLog log = new EventLog();
-                log.Source = Source;
-                log.WriteEntry(Message);
-            }
-            catch(Exception )
-            {
-            }
-        }
-
-        //public static string Log(EnLogLevel level, string message)
-        //{
-        //    return Logger.Instance.Log(level, message);
-        //}
-
-        //public static string Log(string Message)
-        //{
-        //    return Logger.Instance.Log(Message);
-        //}
-
-        //public static string LogError(string Message)
-        //{
-        //    return Logger.Instance.LogError(Message);
-        //}
-
-        //public static string LogException(Exception ex)
-        //{
-        //    return Logger.Instance.LogException(ex);
-        //}
-
-        //public static void LogSeparator()
-        //{
-        //    Logger.Instance.LogSeparator();
-        //}
-
-        //public static EnLogLevel LogLevel
-        //{
-        //    get
-        //    {
-        //        return Logger.Instance.LogLevel;
-        //    }
-        //    set
-        //    {
-        //        Logger.Instance.LogLevel = value;
-        //    }
-        //}
     }
+
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using CFI.Utility.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace CFI.Utility.CVS
 {
@@ -109,7 +110,7 @@ namespace CFI.Utility.CVS
             catch (Exception ex)
             {
                 // Let the user know what went wrong.
-                Logger.LogException(ex);
+                Logger.LogCritical(ex);
             }
             return data;
         }
@@ -129,7 +130,7 @@ namespace CFI.Utility.CVS
             catch (Exception ex)
             {
                 // Let the user know what went wrong.
-                Logger.LogException(ex);
+                Logger.LogCritical(ex);
             }
             return data;
         }

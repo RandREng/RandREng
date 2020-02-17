@@ -5,6 +5,7 @@ using System.Text;
 using System.Management;
 using CFI.Utility.Logging;
 using System.Diagnostics;
+using Microsoft.Extensions.Logging;
 
 namespace CFI.Utility.Printer
 {
@@ -37,17 +38,17 @@ namespace CFI.Utility.Printer
             {
                 ManagementObject mo = new ManagementObject(path);
                 outParams = mo.InvokeMethod("SetDefaultPrinter", inParams, null);
-                Logger.Log(EnLogLevel.INFO, string.Format("Printer {0} is default now ", PrinterID));
+                Logger.Log(LogLevel.Information, string.Format("Printer {0} is default now ", PrinterID));
             }
             catch (Exception e)
             {
-                Logger.Log(EnLogLevel.INFO, "SetDefaultPrinter() - " + e.Message);
+                Logger.Log(LogLevel.Information, "SetDefaultPrinter() - " + e.Message);
             }
         }
 
         public static string QueryPrinters(string printerName, ILogger logger)
         {
-            logger.Log(EnLogLevel.INFO, string.Format("QueryPrinters - {0}", printerName));
+            logger.Log(LogLevel.Information, string.Format("QueryPrinters - {0}", printerName));
             ManagementObjectSearcher query;
             ManagementObjectCollection queryCollection;
             string deviceID = null;
@@ -73,13 +74,13 @@ namespace CFI.Utility.Printer
             query = new ManagementObjectSearcher(queryString);
             queryCollection = query.Get();
             // should only contain one entry
-            logger.Log(EnLogLevel.INFO, "Available Printers");
+            logger.Log(LogLevel.Information, "Available Printers");
             foreach (ManagementObject mo in queryCollection)
             {
                 deviceID = mo["DeviceID"] as string;
-                logger.Log(EnLogLevel.INFO, deviceID);
+                logger.Log(LogLevel.Information, deviceID);
             }
-            logger.Log(EnLogLevel.INFO, "");
+            logger.Log(LogLevel.Information, "");
         }
 
         public bool GetPrinterInfo(string RequestedPrinterName)
@@ -125,11 +126,11 @@ namespace CFI.Utility.Printer
                 bOK = myProcess.ExitCode == 0;
                 if (myProcess.ExitCode != 0)
                 {
-                    logger.Log(EnLogLevel.ERROR, string.Format("PrintTiff - {0} - {1} - {2}", myProcess.StartInfo.FileName, myProcess.StartInfo.Arguments, myProcess.ExitCode));
+                    logger.Log(LogLevel.Error, string.Format("PrintTiff - {0} - {1} - {2}", myProcess.StartInfo.FileName, myProcess.StartInfo.Arguments, myProcess.ExitCode));
                 }
                 else
                 {
-                    logger.Log(EnLogLevel.DEBUG, string.Format("PrintTiff - {0} - {1} - {2}", myProcess.StartInfo.FileName, myProcess.StartInfo.Arguments, myProcess.ExitCode));
+                    logger.Log(LogLevel.Debug, string.Format("PrintTiff - {0} - {1} - {2}", myProcess.StartInfo.FileName, myProcess.StartInfo.Arguments, myProcess.ExitCode));
                 }
             }
             return bOK;
@@ -164,11 +165,11 @@ namespace CFI.Utility.Printer
                 bOK = myProcess.ExitCode == 0;
                 if (myProcess.ExitCode != 0)
                 {
-                    logger.Log(EnLogLevel.ERROR, string.Format("PrintPDF - {0} - {1} - {2}", myProcess.StartInfo.FileName, myProcess.StartInfo.Arguments, myProcess.ExitCode));
+                    logger.Log(LogLevel.Error, string.Format("PrintPDF - {0} - {1} - {2}", myProcess.StartInfo.FileName, myProcess.StartInfo.Arguments, myProcess.ExitCode));
                 }
                 else
                 {
-                    logger.Log(EnLogLevel.DEBUG, string.Format("PrintPDF - {0} - {1} - {2}", myProcess.StartInfo.FileName, myProcess.StartInfo.Arguments, myProcess.ExitCode));
+                    logger.Log(LogLevel.Debug, string.Format("PrintPDF - {0} - {1} - {2}", myProcess.StartInfo.FileName, myProcess.StartInfo.Arguments, myProcess.ExitCode));
                 }
             }
             return bOK;
@@ -180,11 +181,11 @@ namespace CFI.Utility.Printer
             if (GetPrinterInfo(RequestedPrinterName))
             {
                 this.RequestedPrinterName = RequestedPrinterName;
-                Logger.Log(EnLogLevel.INFO, String.Format("PO Printer set to: Name={0}, Driver={1}, Port={2}", PrinterName, PrinterDriver, PrinterPort));
+                Logger.Log(LogLevel.Information, String.Format("PO Printer set to: Name={0}, Driver={1}, Port={2}", PrinterName, PrinterDriver, PrinterPort));
             }
             else
             {
-                Logger.Log(EnLogLevel.INFO, "PO Printer will use the default printer.");
+                Logger.Log(LogLevel.Information, "PO Printer will use the default printer.");
             }
         }
 
@@ -222,7 +223,7 @@ namespace CFI.Utility.Printer
             }
             catch (Exception e)
             {
-                Logger.LogException(e);
+                Logger.LogCritical(e);
             }
 
             return alEntry;

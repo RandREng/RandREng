@@ -121,7 +121,7 @@ namespace RandREng.QBServer
 				}
 				catch (Exception e)
 				{
-					Logger.LogException(e);
+					Logger.LogCritical(e);
 					DisconnectFromQB();
 				}
 			}
@@ -157,7 +157,7 @@ namespace RandREng.QBServer
 					}
 					catch (Exception e)
 					{
-						Logger.LogException(e);
+						Logger.LogCritical(e);
 					}
 				}
 			}

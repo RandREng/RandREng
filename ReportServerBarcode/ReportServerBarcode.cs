@@ -6,6 +6,7 @@ using System.IO;
 using System.Text;
 using ZXing;
 using ZXing.Common;
+using ZXing.Presentation;
 using ZXing.QrCode;
 
 namespace ReportServerBarcode
@@ -49,10 +50,10 @@ namespace ReportServerBarcode
 
 		static public void Encode(Stream stream, string contents, ImageFormat imageFormat, int width, int height, int margin)
 		{
-			BarcodeWriter barcodeWriter = new BarcodeWriter
+			BarcodeWriterPixelData barcodeWriter = new BarcodeWriterPixelData
 			{
 				Format = BarcodeFormat.QR_CODE,
-				Options = new ZXing.QrCode.QrCodeEncodingOptions
+				Options = new QrCodeEncodingOptions
 				{
 					ErrorCorrection = ZXing.QrCode.Internal.ErrorCorrectionLevel.L,
 					CharacterSet = "ISO-8859-1",
@@ -61,8 +62,26 @@ namespace ReportServerBarcode
 					Margin = margin
 				}
 			};
-			Bitmap bitmap = barcodeWriter.Write(contents);
-			bitmap.Save(stream, imageFormat);
+			var pixelData = barcodeWriter.Write(contents);
+			// creating a bitmap from the raw pixel data; if only black and white colors are used it makes no difference
+			// that the pixel data ist BGRA oriented and the bitmap is initialized with RGB
+			using (var bitmap = new System.Drawing.Bitmap(pixelData.Width, pixelData.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb))
+			{
+				var bitmapData = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, pixelData.Width, pixelData.Height),
+				System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+				try
+				{
+					// we assume that the row stride of the bitmap is aligned to 4 byte multiplied by the width of the image
+					System.Runtime.InteropServices.Marshal.Copy(pixelData.Pixels, 0, bitmapData.Scan0,
+					pixelData.Pixels.Length);
+				}
+				finally
+				{
+					bitmap.UnlockBits(bitmapData);
+				}
+				// save to stream as PNG
+				bitmap.Save(stream, imageFormat);
+			}
 		}
 	}
 }

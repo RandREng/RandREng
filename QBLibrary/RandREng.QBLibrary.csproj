@@ -40,7 +40,7 @@
     <Reference Include="Interop.QBXMLRP2, Version=12.0.0.29, Culture=neutral, PublicKeyToken=31d8aec643e18259">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>False</EmbedInteropTypes>
-      <HintPath>..\..\ThirdPartyLibraries\Quickbooks\Interop.QBXMLRP2.dll</HintPath>
+      <HintPath>..\..\..\ThirdPartyLibraries\Quickbooks\Interop.QBXMLRP2.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

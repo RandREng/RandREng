@@ -5,7 +5,7 @@ using System.Xml;
 using Interop.QBXMLRP2;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
-using RandREng.QBLibrary.QBServer;
+//using RandREng.QBLibrary.QBServer;
 using System.ServiceModel;
 using Microsoft.Extensions.Logging;
 using CFI.Utility.Logging;
@@ -29,12 +29,12 @@ namespace RandREng.QBLibrary
 		public QBProcessor(ILogger logger)
 		{
 //			if (System.Environment.Is64BitProcess)
-			{
-				this._processor = new QBProcessor64(logger);
-			}
+			//{
+			//	this._processor = new QBProcessor64(logger);
+			//}
 			//else
 			//{
-			//	this._processor = new QBProcessor32(logger);
+				this._processor = new QBProcessor32(logger);
 			//}
 		}
 
@@ -123,122 +123,122 @@ namespace RandREng.QBLibrary
 		}
 	}
 
-	internal class QBProcessor64 : IQBProcessor
-	{
-		private ILogger Logger { get; set; }
-		internal QBProcessor64(ILogger logger)
-		{
-			this.Logger = logger;
-		}
-		#region IDisposable
-		~QBProcessor64()
-		{
-			Dispose(false);
-		}
-		private bool _disposed = false;
+	//internal class QBProcessor64 : IQBProcessor
+	//{
+	//	private ILogger Logger { get; set; }
+	//	internal QBProcessor64(ILogger logger)
+	//	{
+	//		this.Logger = logger;
+	//	}
+	//	#region IDisposable
+	//	~QBProcessor64()
+	//	{
+	//		Dispose(false);
+	//	}
+	//	private bool _disposed = false;
 
-		public void Dispose()
-		{
-			Dispose(true);
+	//	public void Dispose()
+	//	{
+	//		Dispose(true);
 
-			// Use SupressFinalize in case a subclass
-			// of this type implements a finalizer.
-			GC.SuppressFinalize(this);
-		}
+	//		// Use SupressFinalize in case a subclass
+	//		// of this type implements a finalizer.
+	//		GC.SuppressFinalize(this);
+	//	}
 
-		protected virtual void Dispose(bool disposing)
-		{
-			// If you need thread safety, use a lock around these 
-			// operations, as well as in your methods that use the resource.
-			if (!_disposed)
-			{
+	//	protected virtual void Dispose(bool disposing)
+	//	{
+	//		// If you need thread safety, use a lock around these 
+	//		// operations, as well as in your methods that use the resource.
+	//		if (!_disposed)
+	//		{
 
-				if (this._client != null)
-				{
-					this._client.Disconnect();
-					this._client.Close();
-					this._client = null;
-				}
-				if (disposing)
-				{
-				}
-				// Indicate that the instance has been disposed.
-				_disposed = true;
-			}
+	//			if (this._client != null)
+	//			{
+	//				this._client.Disconnect();
+	//				this._client.Close();
+	//				this._client = null;
+	//			}
+	//			if (disposing)
+	//			{
+	//			}
+	//			// Indicate that the instance has been disposed.
+	//			_disposed = true;
+	//		}
 
-		}
-		#endregion
+	//	}
+	//	#endregion
 
-		public bool CanConnect
-		{
-			get { return false; }
-		}
+	//	public bool CanConnect
+	//	{
+	//		get { return false; }
+	//	}
 
-		QBServer.QBServiceClient _client = null;
+	//	QBServer.QBServiceClient _client = null;
 		
-		QBServer.QBServiceClient Client
-		{
-			get 
-			{
-				if (this._client == null)
-				{
-					this._client = new QBServer.QBServiceClient("BasicHttpBinding_IQBServices");
-					this._client.InnerChannel.OperationTimeout = TimeSpan.FromMinutes(10);
-				}
-				return this._client;
-			}
-		}
+	//	QBServer.QBServiceClient Client
+	//	{
+	//		get 
+	//		{
+	//			if (this._client == null)
+	//			{
+	//				this._client = new QBServer.QBServiceClient("BasicHttpBinding_IQBServices");
+	//				this._client.InnerChannel.OperationTimeout = TimeSpan.FromMinutes(10);
+	//			}
+	//			return this._client;
+	//		}
+	//	}
 
-		public string Transmit(string req)
-		{
-			string temp = null;
-			try
-			{
+	//	public string Transmit(string req)
+	//	{
+	//		string temp = null;
+	//		try
+	//		{
 				
-				QBRequest request = new QBRequest { XML = req };
-				request.CompanyFile = this.CompanyFile;
-				request.AppID = this.AppID;
-				request.AppName = this.AppName;
+	//			QBRequest request = new QBRequest { XML = req };
+	//			request.CompanyFile = this.CompanyFile;
+	//			request.AppID = this.AppID;
+	//			request.AppName = this.AppName;
 
-				QBResponse response = Client.Send(request);
-				temp = response.Data;
-				//			Console.WriteLine("Server response: " + response.Data);
+	//			QBResponse response = Client.Send(request);
+	//			temp = response.Data;
+	//			//			Console.WriteLine("Server response: " + response.Data);
 
-			}
-			catch (Exception e)
-			{
-				this.Logger.LogCritical(e);
-			}
-			return temp;
-		}
+	//		}
+	//		catch (Exception e)
+	//		{
+	//			this.Logger.LogCritical(e);
+	//		}
+	//		return temp;
+	//	}
 
-		readonly string _maxVersion = null;
-		public string MaxVersion
-		{
-			get
-			{
-				if (_maxVersion == null)
-				{
-					try
-					{
-						QBRequest request = new QBRequest { XML = string.Empty };
-						request.CompanyFile = this.CompanyFile;
-						request.AppID = this.AppID;
-						request.AppName = this.AppName;
-					}
-					catch (Exception e)
-					{
-						this.Logger.LogCritical(e);
-					}
-				}
-				return _maxVersion;
-			}
-		}
+	//	readonly string _maxVersion = null;
+	//	public string MaxVersion
+	//	{
+	//		get
+	//		{
+	//			if (_maxVersion == null)
+	//			{
+	//				try
+	//				{
+	//					QBRequest request = new QBRequest { XML = string.Empty };
+	//					request.CompanyFile = this.CompanyFile;
+	//					request.AppID = this.AppID;
+	//					request.AppName = this.AppName;
+	//				}
+	//				catch (Exception e)
+	//				{
+	//					this.Logger.LogCritical(e);
+	//				}
+	//			}
+	//			return _maxVersion;
+	//		}
+	//	}
 
-		public string CompanyFile { get; set; }
-		public string AppID { get; set; }
-		public string AppName { get; set; }
-	}
+	//	public string CompanyFile { get; set; }
+	//	public string AppID { get; set; }
+	//	public string AppName { get; set; }
+	//}
 
 	internal class QBProcessor32 : IQBProcessor, IDisposable
 	{

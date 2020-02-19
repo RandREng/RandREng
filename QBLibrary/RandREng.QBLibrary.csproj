@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Service References\**" />
+    <EmbeddedResource Remove="Service References\**" />
+    <None Remove="Service References\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.1" />
   </ItemGroup>
 

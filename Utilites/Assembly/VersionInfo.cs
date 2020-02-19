@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
+﻿using System.Reflection;
 using System.Threading;
 
-namespace CFI.Utility.Assemblies
+namespace RandREng.Utility.Assembly
 {
     public class VersionInfo
     {
         static public string GetCopyright()
         {
-            Assembly asm = Assembly.GetEntryAssembly();
+            System.Reflection.Assembly asm = System.Reflection.Assembly.GetEntryAssembly();
             object[] obj = asm.GetCustomAttributes(false);
             foreach (object o in obj)
             {
@@ -28,12 +24,12 @@ namespace CFI.Utility.Assemblies
         static public string GetInfo()
         {
             string list = "";
-            System.Version v = Assembly.GetEntryAssembly().GetName().Version;
+            System.Version v = System.Reflection.Assembly.GetEntryAssembly().GetName().Version;
             string s = string.Format(v.Major + "." + v.Minor + "." + v.Build + "." + v.Revision);
-            list += "Executing Assembly: " + Assembly.GetEntryAssembly().GetName().Name + ", version " + s + "\r\n";
+            list += "Executing Assembly: " + System.Reflection.Assembly.GetEntryAssembly().GetName().Name + ", version " + s + "\r\n";
 
-            Assembly[] myAssemblies = Thread.GetDomain().GetAssemblies();
-            foreach (Assembly assem in myAssemblies)
+            System.Reflection.Assembly[] myAssemblies = Thread.GetDomain().GetAssemblies();
+            foreach (System.Reflection.Assembly assem in myAssemblies)
             {
                 if (assem.GetName().Name.IndexOf("System.") == -1)
                 {

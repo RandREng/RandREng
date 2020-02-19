@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
-using System.Text;
 using System.Windows.Forms;
 
-namespace CFI.Utility.Documents
+namespace RandREng.Utility.Documents
 {
     public class DragDropHelper
     {
@@ -29,11 +27,11 @@ namespace CFI.Utility.Documents
             }
             if (filenames != null)
             {
-				e.Effect = DragDropEffects.Copy;
+                e.Effect = DragDropEffects.Copy;
                 foreach (string filename in filenames)
                 {
                     string ext = Path.GetExtension(filename).ToLower();
-                    if (!this.AllowedExt.Contains(ext))
+                    if (!AllowedExt.Contains(ext))
                     {
                         e.Effect = DragDropEffects.None;
                         break;
@@ -47,9 +45,9 @@ namespace CFI.Utility.Documents
             List<string> output = new List<string>();
             OleDataObject dataObject = new OleDataObject(e.Data);
 
-            if (!Directory.Exists(this.OutputDir))
+            if (!Directory.Exists(OutputDir))
             {
-                Directory.CreateDirectory(this.OutputDir);
+                Directory.CreateDirectory(OutputDir);
             }
 
 
@@ -60,7 +58,7 @@ namespace CFI.Utility.Documents
                 {
                     foreach (string path in data)
                     {
-                        string filename = Path.Combine(this.OutputDir, Path.GetFileName(path).ToLower());
+                        string filename = Path.Combine(OutputDir, Path.GetFileName(path).ToLower());
                         File.Copy(path, filename, true);
                         output.Add(filename);
                     }
@@ -80,7 +78,7 @@ namespace CFI.Utility.Documents
                     //use the fileindex to get the name and data stream
                     MemoryStream filestream = filestreams[fileIndex];
 
-                    string filename = Path.Combine(this.OutputDir, filenames[fileIndex]);
+                    string filename = Path.Combine(OutputDir, filenames[fileIndex]);
 
                     //save the file stream using its name to the application path
                     using (FileStream outputStream = File.Create(filename))
@@ -134,10 +132,10 @@ namespace CFI.Utility.Documents
                     void EnumElements([In, MarshalAs(UnmanagedType.U4)] int reserved1, IntPtr reserved2, [In, MarshalAs(UnmanagedType.U4)] int reserved3, [MarshalAs(UnmanagedType.Interface)] out object ppVal);
                     void DestroyElement([In, MarshalAs(UnmanagedType.BStr)] string pwcsName);
                     void RenameElement([In, MarshalAs(UnmanagedType.BStr)] string pwcsOldName, [In, MarshalAs(UnmanagedType.BStr)] string pwcsNewName);
-                    void SetElementTimes([In, MarshalAs(UnmanagedType.BStr)] string pwcsName, [In] System.Runtime.InteropServices.ComTypes.FILETIME pctime, [In] System.Runtime.InteropServices.ComTypes.FILETIME patime, [In] System.Runtime.InteropServices.ComTypes.FILETIME pmtime);
+                    void SetElementTimes([In, MarshalAs(UnmanagedType.BStr)] string pwcsName, [In] FILETIME pctime, [In] FILETIME patime, [In] FILETIME pmtime);
                     void SetClass([In] ref Guid clsid);
                     void SetStateBits(int grfStateBits, int grfMask);
-                    void Stat([Out]out System.Runtime.InteropServices.ComTypes.STATSTG pStatStg, int grfStatFlag);
+                    void Stat([Out]out STATSTG pStatStg, int grfStatFlag);
                 }
 
                 [ComImport, Guid("0000000A-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -149,7 +147,7 @@ namespace CFI.Utility.Documents
                     void SetSize([In, MarshalAs(UnmanagedType.U8)] long cb);
                     void LockRegion([In, MarshalAs(UnmanagedType.U8)] long libOffset, [In, MarshalAs(UnmanagedType.U8)] long cb, [In, MarshalAs(UnmanagedType.U4)] int dwLockType);
                     void UnlockRegion([In, MarshalAs(UnmanagedType.U8)] long libOffset, [In, MarshalAs(UnmanagedType.U8)] long cb, [In, MarshalAs(UnmanagedType.U4)] int dwLockType);
-                    void Stat([Out]out System.Runtime.InteropServices.ComTypes.STATSTG pstatstg, [In, MarshalAs(UnmanagedType.U4)] int grfStatFlag);
+                    void Stat([Out]out STATSTG pstatstg, [In, MarshalAs(UnmanagedType.U4)] int grfStatFlag);
                 }
 
                 [StructLayout(LayoutKind.Sequential, Pack = 4)]
@@ -181,9 +179,9 @@ namespace CFI.Utility.Documents
                     public SIZEL sizel;
                     public POINTL pointl;
                     public uint dwFileAttributes;
-                    public System.Runtime.InteropServices.ComTypes.FILETIME ftCreationTime;
-                    public System.Runtime.InteropServices.ComTypes.FILETIME ftLastAccessTime;
-                    public System.Runtime.InteropServices.ComTypes.FILETIME ftLastWriteTime;
+                    public FILETIME ftCreationTime;
+                    public FILETIME ftLastAccessTime;
+                    public FILETIME ftLastWriteTime;
                     public uint nFileSizeHigh;
                     public uint nFileSizeLow;
                     [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
@@ -205,9 +203,9 @@ namespace CFI.Utility.Documents
                     public SIZEL sizel;
                     public POINTL pointl;
                     public uint dwFileAttributes;
-                    public System.Runtime.InteropServices.ComTypes.FILETIME ftCreationTime;
-                    public System.Runtime.InteropServices.ComTypes.FILETIME ftLastAccessTime;
-                    public System.Runtime.InteropServices.ComTypes.FILETIME ftLastWriteTime;
+                    public FILETIME ftCreationTime;
+                    public FILETIME ftLastAccessTime;
+                    public FILETIME ftLastWriteTime;
                     public uint nFileSizeHigh;
                     public uint nFileSizeLow;
                     [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
@@ -251,12 +249,12 @@ namespace CFI.Utility.Documents
             {
                 //get the underlying dataobject and its ComType IDataObject interface to it
                 this.underlyingDataObject = underlyingDataObject;
-                this.comUnderlyingDataObject = (System.Runtime.InteropServices.ComTypes.IDataObject)this.underlyingDataObject;
+                comUnderlyingDataObject = (System.Runtime.InteropServices.ComTypes.IDataObject)this.underlyingDataObject;
 
                 //get the internal ole dataobject and its GetDataFromHGLOBLAL so it can be called later
                 FieldInfo innerDataField = this.underlyingDataObject.GetType().GetField("innerData", BindingFlags.NonPublic | BindingFlags.Instance);
-                this.oleUnderlyingDataObject = (System.Windows.Forms.IDataObject)innerDataField.GetValue(this.underlyingDataObject);
-                this.getDataFromHGLOBLALMethod = this.oleUnderlyingDataObject.GetType().GetMethod("GetDataFromHGLOBLAL", BindingFlags.NonPublic | BindingFlags.Instance);
+                oleUnderlyingDataObject = (System.Windows.Forms.IDataObject)innerDataField.GetValue(this.underlyingDataObject);
+                getDataFromHGLOBLALMethod = oleUnderlyingDataObject.GetType().GetMethod("GetDataFromHGLOBLAL", BindingFlags.NonPublic | BindingFlags.Instance);
             }
 
             #endregion
@@ -272,7 +270,7 @@ namespace CFI.Utility.Documents
             /// </returns>
             public object GetData(Type format)
             {
-                return this.GetData(format.FullName);
+                return GetData(format.FullName);
             }
 
             /// <summary>
@@ -284,7 +282,7 @@ namespace CFI.Utility.Documents
             /// </returns>
             public object GetData(string format)
             {
-                return this.GetData(format, true);
+                return GetData(format, true);
             }
 
             /// <summary>
@@ -307,7 +305,7 @@ namespace CFI.Utility.Documents
                         try
                         {
                             //use the underlying IDataObject to get the FileGroupDescriptor as a MemoryStream
-                            MemoryStream fileGroupDescriptorStream = (MemoryStream)this.underlyingDataObject.GetData("FileGroupDescriptor", autoConvert);
+                            MemoryStream fileGroupDescriptorStream = (MemoryStream)underlyingDataObject.GetData("FileGroupDescriptor", autoConvert);
                             byte[] fileGroupDescriptorBytes = new byte[fileGroupDescriptorStream.Length];
                             fileGroupDescriptorStream.Read(fileGroupDescriptorBytes, 0, fileGroupDescriptorBytes.Length);
                             fileGroupDescriptorStream.Close();
@@ -353,7 +351,7 @@ namespace CFI.Utility.Documents
                         try
                         {
                             //use the underlying IDataObject to get the FileGroupDescriptorW as a MemoryStream
-                            MemoryStream fileGroupDescriptorStream = (MemoryStream)this.underlyingDataObject.GetData("FileGroupDescriptorW");
+                            MemoryStream fileGroupDescriptorStream = (MemoryStream)underlyingDataObject.GetData("FileGroupDescriptorW");
                             byte[] fileGroupDescriptorBytes = new byte[fileGroupDescriptorStream.Length];
                             fileGroupDescriptorStream.Read(fileGroupDescriptorBytes, 0, fileGroupDescriptorBytes.Length);
                             fileGroupDescriptorStream.Close();
@@ -398,7 +396,7 @@ namespace CFI.Utility.Documents
                         //a array of MemoryStreams containing the data to each file dropped
 
                         //get the array of filenames which lets us know how many file contents exist
-                        string[] fileContentNames = (string[])this.GetData("FileGroupDescriptor");
+                        string[] fileContentNames = (string[])GetData("FileGroupDescriptor");
 
                         //create a MemoryStream array to store the file contents
                         MemoryStream[] fileContents = new MemoryStream[fileContentNames.Length];
@@ -407,7 +405,7 @@ namespace CFI.Utility.Documents
                         for (int fileIndex = 0; fileIndex < fileContentNames.Length; fileIndex++)
                         {
                             //get the data at the file index and store in array
-                            fileContents[fileIndex] = this.GetData(format, fileIndex);
+                            fileContents[fileIndex] = GetData(format, fileIndex);
                         }
 
                         //return array of MemoryStreams containing file contents
@@ -415,7 +413,7 @@ namespace CFI.Utility.Documents
                 }
 
                 //use underlying IDataObject to handle getting of data
-                return this.underlyingDataObject.GetData(format, autoConvert);
+                return underlyingDataObject.GetData(format, autoConvert);
             }
 
             /// <summary>
@@ -430,7 +428,7 @@ namespace CFI.Utility.Documents
             {
                 //create a FORMATETC struct to request the data with
                 FORMATETC formatetc = new FORMATETC();
-                formatetc.cfFormat = (short)System.Windows.Forms.DataFormats.GetFormat(format).Id;
+                formatetc.cfFormat = (short)DataFormats.GetFormat(format).Id;
                 formatetc.dwAspect = DVASPECT.DVASPECT_CONTENT;
                 formatetc.lindex = index;
                 formatetc.ptd = new IntPtr(0);
@@ -440,7 +438,7 @@ namespace CFI.Utility.Documents
                 STGMEDIUM medium = new STGMEDIUM();
 
                 //using the Com IDataObject interface get the data using the defined FORMATETC
-                this.comUnderlyingDataObject.GetData(ref formatetc, out medium);
+                comUnderlyingDataObject.GetData(ref formatetc, out medium);
 
                 //retrieve the data depending on the returned store type
                 switch (medium.tymed)
@@ -453,7 +451,7 @@ namespace CFI.Utility.Documents
                         NativeMethods.IStorage iStorage = null;
                         NativeMethods.IStorage iStorage2 = null;
                         NativeMethods.ILockBytes iLockBytes = null;
-                        System.Runtime.InteropServices.ComTypes.STATSTG iLockBytesStat;
+                        STATSTG iLockBytesStat;
                         try
                         {
                             //marshal the returned pointer to a IStorage object
@@ -470,7 +468,7 @@ namespace CFI.Utility.Documents
                             iStorage2.Commit(0);
 
                             //get the STATSTG of the ILockBytes to determine how many bytes were written to it
-                            iLockBytesStat = new System.Runtime.InteropServices.ComTypes.STATSTG();
+                            iLockBytesStat = new STATSTG();
                             iLockBytes.Stat(out iLockBytesStat, 1);
                             int iLockBytesSize = (int)iLockBytesStat.cbSize;
 
@@ -494,7 +492,7 @@ namespace CFI.Utility.Documents
                         //returned as a MemoryStream
 
                         IStream iStream = null;
-                        System.Runtime.InteropServices.ComTypes.STATSTG iStreamStat;
+                        STATSTG iStreamStat;
                         try
                         {
                             //marshal the returned pointer to a IStream object
@@ -502,7 +500,7 @@ namespace CFI.Utility.Documents
                             Marshal.Release(medium.unionmember);
 
                             //get the STATSTG of the IStream to determine how many bytes are in it
-                            iStreamStat = new System.Runtime.InteropServices.ComTypes.STATSTG();
+                            iStreamStat = new STATSTG();
                             iStream.Stat(out iStreamStat, 0);
                             int iStreamSize = (int)iStreamStat.cbSize;
 
@@ -523,7 +521,7 @@ namespace CFI.Utility.Documents
                         //to handle a HGlobal the exisitng "GetDataFromHGLOBLAL" method is invoked via
                         //reflection
 
-                        return (MemoryStream)this.getDataFromHGLOBLALMethod.Invoke(this.oleUnderlyingDataObject, new object[] { DataFormats.GetFormat((short)formatetc.cfFormat).Name, medium.unionmember });
+                        return (MemoryStream)getDataFromHGLOBLALMethod.Invoke(oleUnderlyingDataObject, new object[] { DataFormats.GetFormat(formatetc.cfFormat).Name, medium.unionmember });
                 }
 
                 return null;
@@ -538,7 +536,7 @@ namespace CFI.Utility.Documents
             /// </returns>
             public bool GetDataPresent(Type format)
             {
-                return this.underlyingDataObject.GetDataPresent(format);
+                return underlyingDataObject.GetDataPresent(format);
             }
 
             /// <summary>
@@ -550,7 +548,7 @@ namespace CFI.Utility.Documents
             /// </returns>
             public bool GetDataPresent(string format)
             {
-                return this.underlyingDataObject.GetDataPresent(format);
+                return underlyingDataObject.GetDataPresent(format);
             }
 
             /// <summary>
@@ -563,7 +561,7 @@ namespace CFI.Utility.Documents
             /// </returns>
             public bool GetDataPresent(string format, bool autoConvert)
             {
-                return this.underlyingDataObject.GetDataPresent(format, autoConvert);
+                return underlyingDataObject.GetDataPresent(format, autoConvert);
             }
 
             /// <summary>
@@ -574,7 +572,7 @@ namespace CFI.Utility.Documents
             /// </returns>
             public string[] GetFormats()
             {
-                return this.underlyingDataObject.GetFormats();
+                return underlyingDataObject.GetFormats();
             }
 
             /// <summary>
@@ -586,7 +584,7 @@ namespace CFI.Utility.Documents
             /// </returns>
             public string[] GetFormats(bool autoConvert)
             {
-                return this.underlyingDataObject.GetFormats(autoConvert);
+                return underlyingDataObject.GetFormats(autoConvert);
             }
 
             /// <summary>
@@ -595,7 +593,7 @@ namespace CFI.Utility.Documents
             /// <param name="data">The data to store.</param>
             public void SetData(object data)
             {
-                this.underlyingDataObject.SetData(data);
+                underlyingDataObject.SetData(data);
             }
 
             /// <summary>
@@ -605,7 +603,7 @@ namespace CFI.Utility.Documents
             /// <param name="data">The data to store.</param>
             public void SetData(Type format, object data)
             {
-                this.underlyingDataObject.SetData(format, data);
+                underlyingDataObject.SetData(format, data);
             }
 
             /// <summary>
@@ -615,7 +613,7 @@ namespace CFI.Utility.Documents
             /// <param name="data">The data to store.</param>
             public void SetData(string format, object data)
             {
-                this.underlyingDataObject.SetData(format, data);
+                underlyingDataObject.SetData(format, data);
             }
 
             /// <summary>
@@ -626,7 +624,7 @@ namespace CFI.Utility.Documents
             /// <param name="data">The data to store.</param>
             public void SetData(string format, bool autoConvert, object data)
             {
-                this.underlyingDataObject.SetData(format, autoConvert, data);
+                underlyingDataObject.SetData(format, autoConvert, data);
             }
 
             #endregion

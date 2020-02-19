@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Text;
 using ZXing;
-using ZXing.Common;
-using ZXing.Presentation;
 using ZXing.QrCode;
 
 namespace ReportServerBarcode
 {
-	public class QRCode
+    public class QRCode
 	{
 		private const BarcodeFormat DEFAULT_BARCODE_FORMAT = BarcodeFormat.QR_CODE;
 		private static readonly ImageFormat DEFAULT_IMAGE_FORMAT = ImageFormat.Png;

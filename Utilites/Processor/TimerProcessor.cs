@@ -1,21 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Collections;
 using CFI.Utility.Logging;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-namespace CFI.Utility.Processor
+namespace RandREng.Utility.Processor
 {
     public class TimerProcessor
     {
-        Thread Thread {get; set;}
-        public bool Processing  {get; protected set;}
+        Thread Thread { get; set; }
+        public bool Processing { get; protected set; }
         protected ProcessQueue PQueue { get; set; }
-        virtual protected ILogger Logger {get; set;}
+        virtual protected ILogger Logger { get; set; }
         private System.Timers.Timer m_BaseTimer;
         protected int Stagger = 0;
         protected bool SyncOnHour = false;
@@ -23,7 +20,7 @@ namespace CFI.Utility.Processor
 
         protected string InstanceName { get; private set; }
         protected string ProcessorName { get; private set; }
-        protected string EventSource { get { return this.ProcessorName + " - " + this.InstanceName; } }
+        protected string EventSource { get { return ProcessorName + " - " + InstanceName; } }
 
         protected TimerProcessor(string instanceName, string processorName)
             : this(instanceName, processorName, NullLogger.Instance)
@@ -32,28 +29,28 @@ namespace CFI.Utility.Processor
 
         protected TimerProcessor(string instanceName, string processorName, ILogger logger)
         {
-            this.ProcessorName = processorName;
-            this.InstanceName = instanceName;
-            this.Thread = new Thread(this.DoWork);
-            this.Logger = logger;
-            this.PQueue = new ProcessQueue();
-            this.Processing = true;
+            ProcessorName = processorName;
+            InstanceName = instanceName;
+            Thread = new Thread(DoWork);
+            Logger = logger;
+            PQueue = new ProcessQueue();
+            Processing = true;
         }
 
         protected void Start()
         {
-            this.Init();
-            if (this.Processing)
+            Init();
+            if (Processing)
             {
                 Logger.Log(LogLevel.Information, "Processor starting.");
-                this.Thread.Start();
+                Thread.Start();
             }
             else
             {
                 Logger.Log(LogLevel.Information, "Processor DISABLED.");
             }
         }
-        
+
         /// <summary>
         /// Stop this service.
         /// </summary>
@@ -62,11 +59,11 @@ namespace CFI.Utility.Processor
             try
             {
                 Logger.Log(LogLevel.Information, "Processor stopping.");
-                if (this.Processing)
+                if (Processing)
                 {
-                    this.Processing = false;
-                    this.PQueue.Produce("quitthread");
-                    this.Thread.Join(30000);
+                    Processing = false;
+                    PQueue.Produce("quitthread");
+                    Thread.Join(30000);
                 }
                 Logger.Log(LogLevel.Information, "Processor stopped.");
             }
@@ -94,7 +91,7 @@ namespace CFI.Utility.Processor
         {
             try
             {
-                Int32 delay = 0;
+                int delay = 0;
 #if !DEBUG
                 if (this.SyncOnHour)
                 {
@@ -112,14 +109,14 @@ namespace CFI.Utility.Processor
 
                 if (delay > 0)
                 {
-                    System.Threading.Thread.Sleep((Int32)delay);
+                    Thread.Sleep(delay);
                 }
-                this.Producer(DateTime.Now);
+                Producer(DateTime.Now);
 
-                this.m_BaseTimer = new System.Timers.Timer();
-                this.m_BaseTimer.Interval = this.Interval;
-                this.m_BaseTimer.Elapsed += new System.Timers.ElapsedEventHandler(m_BaseTimer_Elapsed);
-                this.m_BaseTimer.Enabled = true;
+                m_BaseTimer = new System.Timers.Timer();
+                m_BaseTimer.Interval = Interval;
+                m_BaseTimer.Elapsed += new System.Timers.ElapsedEventHandler(m_BaseTimer_Elapsed);
+                m_BaseTimer.Enabled = true;
 
                 while (Processing)
                 {
@@ -143,14 +140,14 @@ namespace CFI.Utility.Processor
 
         void m_BaseTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            this.Producer(e.SignalTime);
+            Producer(e.SignalTime);
         }
 
         protected void WriteEventLog(string message)
         {
-            #if !DEBUG
+#if !DEBUG
             CFI.Utility.Logging.Logger.WriteEventLog(this.EventSource, message);
-            #endif
+#endif
         }
 
         protected class ProcessQueue

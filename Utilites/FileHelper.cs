@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿using System.IO;
 
-namespace CFI.Utility
+namespace RandREng.Utility
 {
     public class FileHelper
     {
@@ -68,7 +64,7 @@ namespace CFI.Utility
                 file1byte = fs1.ReadByte();
                 file2byte = fs2.ReadByte();
             }
-            while ((file1byte == file2byte) && (file1byte != -1));
+            while (file1byte == file2byte && file1byte != -1);
 
             // Close the files.
             fs1.Close();
@@ -77,7 +73,7 @@ namespace CFI.Utility
             // Return the success of the comparison. "file1byte" is 
             // equal to "file2byte" at this point only if the files are 
             // the same.
-            return ((file1byte - file2byte) == 0);
+            return file1byte - file2byte == 0;
         }
 
         public static bool MoveFile(string SourceFilename, string DestPath, out string DestFilename)
@@ -121,22 +117,22 @@ namespace CFI.Utility
             return bNew;
         }
 
-		public static string UniqueFileName(string fileName, out string LastFilename)
-		{
-			int Count = 1;
-			string BaseFileName = Path.GetFileNameWithoutExtension(fileName);
-			string Ext = Path.GetExtension(fileName);
-			string DestPath = Path.GetDirectoryName(fileName);
-			string DestFilename = Path.Combine(DestPath, Path.GetFileName(fileName));
-			LastFilename = "";
-			while (File.Exists(DestFilename))
-			{
-				LastFilename = DestFilename;
-				DestFilename = Path.Combine(DestPath, BaseFileName + "_" + Count + Ext);
-				Count++;
-			}
-			return DestFilename;
-		}
+        public static string UniqueFileName(string fileName, out string LastFilename)
+        {
+            int Count = 1;
+            string BaseFileName = Path.GetFileNameWithoutExtension(fileName);
+            string Ext = Path.GetExtension(fileName);
+            string DestPath = Path.GetDirectoryName(fileName);
+            string DestFilename = Path.Combine(DestPath, Path.GetFileName(fileName));
+            LastFilename = "";
+            while (File.Exists(DestFilename))
+            {
+                LastFilename = DestFilename;
+                DestFilename = Path.Combine(DestPath, BaseFileName + "_" + Count + Ext);
+                Count++;
+            }
+            return DestFilename;
+        }
 
         public static string UniqueFileName(string fileName, string DestPath, out string LastFilename)
         {

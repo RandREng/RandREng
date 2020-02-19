@@ -1,9 +1,0 @@
-SCC = This is a Source Code Control file
-
-[CFILogger.csproj]
-SCC_Aux_Path = "\\fusion-dc-03\flooringdata\flooringvss"
-SCC_Project_Name = "$/Code/CFI/InstallationManager/CFILogger", PXMAAAAA
-
-[CFI.Utility.Logger.csproj]
-SCC_Aux_Path = "\\fusion-dc-03\flooringdata\flooringvss"
-SCC_Project_Name = "$/Code/CFI/InstallationManager/CFILogger", PXMAAAAA

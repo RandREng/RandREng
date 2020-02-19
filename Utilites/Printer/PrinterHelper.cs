@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Management;
 using CFI.Utility.Logging;
 using System.Diagnostics;
 using Microsoft.Extensions.Logging;
 
-namespace CFI.Utility.Printer
+namespace RandREng.Utility.Printer
 {
     public class PrinterHelper
     {
@@ -102,12 +101,12 @@ namespace CFI.Utility.Printer
                 string Name = ((string)mo["Name"]).ToUpper();
                 if (RequestedPrinterName.ToUpper() == Name)
                 {
-                    PrinterName = mo["Name"] as String;
+                    PrinterName = mo["Name"] as string;
                     PrinterDriver = mo["DriverName"] as string;
-                    PrinterPort = mo["PortName"] as String;
+                    PrinterPort = mo["PortName"] as string;
                     Success = true;
                 }
-                Logger.Log(String.Format("GetPrinterInfo: Name={0}, Driver={1}, Port={2}", mo["Name"].ToString(), mo["DriverName"].ToString(), mo["PortName"].ToString()));
+                Logger.Log(string.Format("GetPrinterInfo: Name={0}, Driver={1}, Port={2}", mo["Name"].ToString(), mo["DriverName"].ToString(), mo["PortName"].ToString()));
             }
 
             return Success;
@@ -119,7 +118,7 @@ namespace CFI.Utility.Printer
             using (Process myProcess = new Process())
             {
                 myProcess.StartInfo.FileName = "rundll32.exe";
-                myProcess.StartInfo.Arguments = String.Format("shimgvw.dll,ImageView_PrintTo /pt \"{0}\" \"{1}\"", filename, printer);
+                myProcess.StartInfo.Arguments = string.Format("shimgvw.dll,ImageView_PrintTo /pt \"{0}\" \"{1}\"", filename, printer);
                 myProcess.StartInfo.CreateNoWindow = true;
                 myProcess.Start();
                 myProcess.WaitForExit();
@@ -145,7 +144,7 @@ namespace CFI.Utility.Printer
                 startInfo.Verb = "print";
                 myProcess.StartInfo = startInfo;
                 myProcess.Start();
-//                myProcess.WaitForExit();
+                //                myProcess.WaitForExit();
                 bOk = true;
             }
             return bOk;
@@ -158,7 +157,7 @@ namespace CFI.Utility.Printer
             {
                 string progfiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
                 myProcess.StartInfo.FileName = progfiles + @"\Foxit Software\Foxit Reader\Foxit Reader.exe";
-                myProcess.StartInfo.Arguments = String.Format("/t \"{0}\" \"{1}\"", filename, printer);
+                myProcess.StartInfo.Arguments = string.Format("/t \"{0}\" \"{1}\"", filename, printer);
                 myProcess.StartInfo.CreateNoWindow = true;
                 myProcess.Start();
                 myProcess.WaitForExit();
@@ -181,7 +180,7 @@ namespace CFI.Utility.Printer
             if (GetPrinterInfo(RequestedPrinterName))
             {
                 this.RequestedPrinterName = RequestedPrinterName;
-                Logger.Log(LogLevel.Information, String.Format("PO Printer set to: Name={0}, Driver={1}, Port={2}", PrinterName, PrinterDriver, PrinterPort));
+                Logger.Log(LogLevel.Information, string.Format("PO Printer set to: Name={0}, Driver={1}, Port={2}", PrinterName, PrinterDriver, PrinterPort));
             }
             else
             {
@@ -192,14 +191,14 @@ namespace CFI.Utility.Printer
 
         public struct SuEvent
         {
-            public System.DateTime TimeGenerated;
+            public DateTime TimeGenerated;
             public string Message;
-            public SuEvent(System.DateTime time, string strMessage)
+            public SuEvent(DateTime time, string strMessage)
             {
-                this.TimeGenerated = time;
-                this.Message = strMessage;
+                TimeGenerated = time;
+                Message = strMessage;
             }
-        } ;
+        };
 
         static public List<SuEvent> GetPrintedFilesFromEventLog(ILogger Logger)
         {

@@ -1,10 +1,5 @@
 using Microsoft.Extensions.Logging;
 using System;
-using System.IO;
-using System.Text;
-using System.Threading;
-using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace CFI.Utility.Logging
 {

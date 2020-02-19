@@ -6,11 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Text;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 
-namespace RandREng.Documents
+namespace RandREng.Utility.Documents
 {
 
 	internal class ImageRenderListener : IRenderListener
@@ -42,12 +41,12 @@ namespace RandREng.Documents
 			PdfImageObject image = renderInfo.GetImage();
 			PdfName filter = (PdfName)image.Get(PdfName.FILTER);
 
-			int width = Convert.ToInt32(image.Get(PdfName.WIDTH).ToString()); 
-			int bitsPerComponent = Convert.ToInt32(image.Get(PdfName.BITSPERCOMPONENT).ToString()); 
-			string subtype = image.Get(PdfName.SUBTYPE).ToString(); 
-			int height = Convert.ToInt32(image.Get(PdfName.HEIGHT).ToString()); 
-			int length = Convert.ToInt32(image.Get(PdfName.LENGTH).ToString()); 
-			string colorSpace = image.Get(PdfName.COLORSPACE).ToString(); 
+			int width = Convert.ToInt32(image.Get(PdfName.WIDTH).ToString());
+			int bitsPerComponent = Convert.ToInt32(image.Get(PdfName.BITSPERCOMPONENT).ToString());
+			string subtype = image.Get(PdfName.SUBTYPE).ToString();
+			int height = Convert.ToInt32(image.Get(PdfName.HEIGHT).ToString());
+			int length = Convert.ToInt32(image.Get(PdfName.LENGTH).ToString());
+			string colorSpace = image.Get(PdfName.COLORSPACE).ToString();
 
 			/* It appears to be safe to assume that when filter == null, PdfImageObject 
 			 * does not know how to decode the image to a System.Drawing.Image. 
@@ -56,7 +55,7 @@ namespace RandREng.Documents
 			 * width, height and bits per component all equal zero as well. */
 			if (filter != null)
 			{
-				System.Drawing.Bitmap drawingImage = image.GetDrawingImage() as Bitmap;
+				Bitmap drawingImage = image.GetDrawingImage() as Bitmap;
 
 				string extension = ".";
 
@@ -80,8 +79,8 @@ namespace RandREng.Documents
 				/* Rather than struggle with the image stream and try to figure out how to handle 
 				 * BitMapData scan lines in various formats (like virtually every sample I’ve found 
 				 * online), use the PdfImageObject.GetDrawingImage() method, which does the work for us. */
-				this.Images.Add(drawingImage, extension);
-				this.Image = drawingImage;
+				Images.Add(drawingImage, extension);
+				Image = drawingImage;
 			}
 		}
 		public void RenderText(TextRenderInfo renderInfo) { }
@@ -128,61 +127,61 @@ namespace RandREng.Documents
 		#endregion Public Methods
 
 		#endregion Methods
-	} 
+	}
 
-    public class MyImageRenderListener : IRenderListener
-    {
-        public void RenderText(TextRenderInfo renderInfo) { }
-        public void BeginTextBlock() { }
-        public void EndTextBlock() { }
+	public class MyImageRenderListener : IRenderListener
+	{
+		public void RenderText(TextRenderInfo renderInfo) { }
+		public void BeginTextBlock() { }
+		public void EndTextBlock() { }
 
-        public Bitmap Image = null;
-        public void RenderImage(ImageRenderInfo renderInfo)
-        {
-            try
-            {
-                PdfImageObject image = renderInfo.GetImage();
-                if (image == null) return;
+		public Bitmap Image = null;
+		public void RenderImage(ImageRenderInfo renderInfo)
+		{
+			try
+			{
+				PdfImageObject image = renderInfo.GetImage();
+				if (image == null) return;
 
-                using (MemoryStream ms = new MemoryStream(image.GetImageAsBytes()))
-                {
-                    Bitmap i = (System.Drawing.Bitmap)Bitmap.FromStream(ms);
-                    Image = (System.Drawing.Bitmap) i.Clone();
-                    i.Dispose();
-//                    int dpi = i.Height / 11;
-                    int yDPI = Image.Height / 11;
-                    int xDPI = (Image.Width * 2) / 17;
+				using (MemoryStream ms = new MemoryStream(image.GetImageAsBytes()))
+				{
+					Bitmap i = (Bitmap)System.Drawing.Image.FromStream(ms);
+					Image = (Bitmap)i.Clone();
+					i.Dispose();
+					//                    int dpi = i.Height / 11;
+					int yDPI = Image.Height / 11;
+					int xDPI = Image.Width * 2 / 17;
 
-                    xDPI = Math.Abs(xDPI - 300) < 10 ? 300 : xDPI;
-                    yDPI = Math.Abs(yDPI - 300) < 10 ? 300 : yDPI;
-                    xDPI = Math.Abs(xDPI - 600) < 10 ? 600 : xDPI;
-                    yDPI = Math.Abs(yDPI - 600) < 10 ? 600 : yDPI;
+					xDPI = Math.Abs(xDPI - 300) < 10 ? 300 : xDPI;
+					yDPI = Math.Abs(yDPI - 300) < 10 ? 300 : yDPI;
+					xDPI = Math.Abs(xDPI - 600) < 10 ? 600 : xDPI;
+					yDPI = Math.Abs(yDPI - 600) < 10 ? 600 : yDPI;
 
-                    if (xDPI == yDPI)
-                    {
-                        Image.SetResolution(xDPI, yDPI);
-                    }
-                    else
-                    {
+					if (xDPI == yDPI)
+					{
+						Image.SetResolution(xDPI, yDPI);
+					}
+					else
+					{
 
-                    }
-                }
-            }
-            catch (IOException)
-            {
-                /*
+					}
+				}
+			}
+			catch (IOException)
+			{
+				/*
                  * pass-through; image type not supported by iText[Sharp]; e.g. jbig2
                 */
-            }
-        }
-    }
+			}
+		}
+	}
 
-    public class PDFDocument : IDocument
-    {
+	public class PDFDocument : IDocument
+	{
 		public string FileName { get; set; }
 		~PDFDocument()
 		{
-			this.Close();
+			Close();
 		}
 
 		public static void AddImage(Stream inputPdfStream, Stream outputPdfStream, Stream inputImageStream)
@@ -209,9 +208,9 @@ namespace RandREng.Documents
 
 		public void Open(string fileName)
 		{
-			this.reader = new PdfReader(fileName);
-			this.parser = new PdfReaderContentParser(reader);
-			this.listener = new MyImageRenderListener();
+			reader = new PdfReader(fileName);
+			parser = new PdfReaderContentParser(reader);
+			listener = new MyImageRenderListener();
 
 		}
 
@@ -237,8 +236,8 @@ namespace RandREng.Documents
 
 		private Bitmap GetImagesFromPdfDict(PdfDictionary dict)
 		{
-			PdfDictionary res = (PdfDictionary)(PdfReader.GetPdfObject(dict.Get(PdfName.RESOURCES)));
-			PdfDictionary xobj = (PdfDictionary)(PdfReader.GetPdfObject(res.Get(PdfName.XOBJECT)));
+			PdfDictionary res = (PdfDictionary)PdfReader.GetPdfObject(dict.Get(PdfName.RESOURCES));
+			PdfDictionary xobj = (PdfDictionary)PdfReader.GetPdfObject(res.Get(PdfName.XOBJECT));
 			Bitmap bm = null;
 			if (xobj != null)
 			{
@@ -247,13 +246,13 @@ namespace RandREng.Documents
 					PdfObject obj = xobj.Get(name);
 					if (obj.IsIndirect())
 					{
-						PdfDictionary tg = (PdfDictionary)(PdfReader.GetPdfObject(obj));
-						PdfName subtype = (PdfName)(PdfReader.GetPdfObject(tg.Get(PdfName.SUBTYPE)));
+						PdfDictionary tg = (PdfDictionary)PdfReader.GetPdfObject(obj);
+						PdfName subtype = (PdfName)PdfReader.GetPdfObject(tg.Get(PdfName.SUBTYPE));
 						if (PdfName.IMAGE.Equals(subtype))
 						{
 							int xrefIdx = ((PRIndirectReference)obj).Number;
-							PdfObject pdfObj = this.reader.GetPdfObject(xrefIdx);
-							PRStream str = (PRStream)(pdfObj);
+							PdfObject pdfObj = reader.GetPdfObject(xrefIdx);
+							PRStream str = (PRStream)pdfObj;
 
 							PdfArray decode = tg.GetAsArray(PdfName.DECODE);
 							int width = tg.GetAsNumber(PdfName.WIDTH).IntValue;
@@ -296,12 +295,12 @@ namespace RandREng.Documents
 							}
 							else
 							{
-								iTextSharp.text.pdf.parser.PdfImageObject pdfImage = new iTextSharp.text.pdf.parser.PdfImageObject(str);
+								PdfImageObject pdfImage = new PdfImageObject(str);
 
-								bm = (System.Drawing.Bitmap)pdfImage.GetDrawingImage();
+								bm = (Bitmap)pdfImage.GetDrawingImage();
 							}
 							int yDPI = bm.Height / 11;
-							int xDPI = (bm.Width * 2) / 17;
+							int xDPI = bm.Width * 2 / 17;
 
 							xDPI = Math.Abs(xDPI - 300) < 10 ? 300 : xDPI;
 							yDPI = Math.Abs(yDPI - 300) < 10 ? 300 : yDPI;
@@ -333,7 +332,7 @@ namespace RandREng.Documents
 			throw new NotImplementedException();
 		}
 
-		public void Save(System.Drawing.Bitmap bm, string filename)
+		public void Save(Bitmap bm, string filename)
 		{
 			Save(bm, filename, RotateFlipType.RotateNoneFlipNone);
 		}
@@ -343,7 +342,7 @@ namespace RandREng.Documents
 		const float PAGE_TOP_MARGIN = 0;
 		const float PAGE_BOTTOM_MARGIN = 0;
 
-		public void Save(System.Drawing.Bitmap bm, string filename, System.Drawing.RotateFlipType rotate)
+		public void Save(Bitmap bm, string filename, RotateFlipType rotate)
 		{
 			Bitmap image = bm;
 
@@ -354,13 +353,13 @@ namespace RandREng.Documents
 
 			using (FileStream stream = new FileStream(filename, FileMode.Create))
 			{
-				using (iTextSharp.text.Document pdfDocument = new iTextSharp.text.Document(PageSize.LETTER, PAGE_LEFT_MARGIN, PAGE_RIGHT_MARGIN, PAGE_TOP_MARGIN, PAGE_BOTTOM_MARGIN))
+				using (Document pdfDocument = new Document(PageSize.LETTER, PAGE_LEFT_MARGIN, PAGE_RIGHT_MARGIN, PAGE_TOP_MARGIN, PAGE_BOTTOM_MARGIN))
 				{
-					iTextSharp.text.pdf.PdfWriter writer = iTextSharp.text.pdf.PdfWriter.GetInstance(pdfDocument, stream);
+					PdfWriter writer = PdfWriter.GetInstance(pdfDocument, stream);
 					pdfDocument.Open();
 
 					MemoryStream ms = new MemoryStream();
-					image.Save(ms, System.Drawing.Imaging.ImageFormat.Tiff);
+					image.Save(ms, ImageFormat.Tiff);
 					iTextSharp.text.Image img = iTextSharp.text.Image.GetInstance(ms);
 					img.ScaleToFit(PageSize.LETTER.Width - (PAGE_LEFT_MARGIN + PAGE_RIGHT_MARGIN), PageSize.LETTER.Height - (PAGE_TOP_MARGIN + PAGE_BOTTOM_MARGIN));
 					pdfDocument.Add(img);
@@ -371,23 +370,23 @@ namespace RandREng.Documents
 			}
 		}
 
-		public void Add(System.Drawing.Bitmap bm)
+		public void Add(Bitmap bm)
 		{
-			this.Add(bm, RotateFlipType.RotateNoneFlipNone);
+			Add(bm, RotateFlipType.RotateNoneFlipNone);
 		}
 
 		FileStream stream;
-		iTextSharp.text.Document pdfDocument;
-		iTextSharp.text.pdf.PdfWriter writer;
+		Document pdfDocument;
+		PdfWriter writer;
 
-		public void Add(System.Drawing.Bitmap bm, System.Drawing.RotateFlipType rotate)
+		public void Add(Bitmap bm, RotateFlipType rotate)
 		{
-			if (this.stream == null)
+			if (stream == null)
 			{
-				this.stream = new FileStream(this.FileName, FileMode.Create);
-				this.pdfDocument = new iTextSharp.text.Document(PageSize.LETTER, PAGE_LEFT_MARGIN, PAGE_RIGHT_MARGIN, PAGE_TOP_MARGIN, PAGE_BOTTOM_MARGIN);
-				this.writer = iTextSharp.text.pdf.PdfWriter.GetInstance(pdfDocument, stream);
-				this.pdfDocument.Open();
+				stream = new FileStream(FileName, FileMode.Create);
+				pdfDocument = new Document(PageSize.LETTER, PAGE_LEFT_MARGIN, PAGE_RIGHT_MARGIN, PAGE_TOP_MARGIN, PAGE_BOTTOM_MARGIN);
+				writer = PdfWriter.GetInstance(pdfDocument, stream);
+				pdfDocument.Open();
 			}
 
 			Bitmap image = bm;
@@ -406,14 +405,14 @@ namespace RandREng.Documents
 
 		iTextSharp.text.Image getImage(Bitmap image)
 		{
-			if (image.PixelFormat == System.Drawing.Imaging.PixelFormat.Format1bppIndexed)
+			if (image.PixelFormat == PixelFormat.Format1bppIndexed)
 			{
 				int w = image.Width;
 				int h = image.Height;
 
 				System.Drawing.Rectangle rect = new System.Drawing.Rectangle(0, 0, image.Width, image.Height);
-				System.Drawing.Imaging.BitmapData bmpData =
-					image.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite,
+				BitmapData bmpData =
+					image.LockBits(rect, ImageLockMode.ReadWrite,
 					image.PixelFormat);
 
 				// Get the address of the first line.
@@ -421,13 +420,13 @@ namespace RandREng.Documents
 				int bytes = Math.Abs(bmpData.Stride) * image.Height;
 				byte[] rgbValues = new byte[bytes];
 
-				int byteWidth = (w / 8) + ((w & 7) != 0 ? 1 : 0);
+				int byteWidth = w / 8 + ((w & 7) != 0 ? 1 : 0);
 				byte[] pixelsByte = new byte[byteWidth * h];
 
 				// Copy the RGB values into the array.
 				for (int a = 0; a < h; a++)
 				{
-					System.Runtime.InteropServices.Marshal.Copy(ptr, pixelsByte, a * byteWidth, byteWidth);
+					Marshal.Copy(ptr, pixelsByte, a * byteWidth, byteWidth);
 					ptr = ptr + bmpData.Stride;
 				}
 				image.UnlockBits(bmpData);
@@ -442,22 +441,22 @@ namespace RandREng.Documents
 		}
 		public void Close()
 		{
-			if (this.pdfDocument != null)
+			if (pdfDocument != null)
 			{
-				this.pdfDocument.Close();
-				this.pdfDocument.Dispose();
-				this.writer.Close();
-				this.writer.Dispose();
-				this.stream.Close();
-				this.stream.Dispose();
-				this.pdfDocument = null;
-				this.writer = null;
-				this.pdfDocument = null;
+				pdfDocument.Close();
+				pdfDocument.Dispose();
+				writer.Close();
+				writer.Dispose();
+				stream.Close();
+				stream.Dispose();
+				pdfDocument = null;
+				writer = null;
+				pdfDocument = null;
 			}
 
-			if (this.reader != null)
+			if (reader != null)
 			{
-				this.reader.Close();
+				reader.Close();
 			}
 
 		}

@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using CFI.Utility.Logging;
 using Microsoft.Extensions.Logging;
 
-namespace CFI.Utility.CVS
+namespace RandREng.Utility.CVS
 {
     public class Reader
     {
@@ -37,7 +35,7 @@ namespace CFI.Utility.CVS
         /// <summary>
         /// Defines the default delimiter character separating each field.
         /// </summary>
-        public char Delimiter {get; set;}
+        public char Delimiter { get; set; }
 
         /// <summary>
         /// Defines the default quote character wrapping every field.
@@ -47,7 +45,7 @@ namespace CFI.Utility.CVS
         /// <summary>
         /// Defines the default escape character letting insert quotation characters inside a quoted field.
         /// </summary>
-        public char Escape {get; set;}
+        public char Escape { get; set; }
 
         /// <summary>
         /// Defines the default comment character indicating that a line is commented out.
@@ -58,15 +56,15 @@ namespace CFI.Utility.CVS
 
         public Reader()
         {
-            this.Comment = Reader._defaultComment;
-            this.Delimiter = Reader._defaultDelimiter;
-            this.Escape = Reader._defaultEscape;
-            this.Quote = Reader._defaultQuote;
+            Comment = _defaultComment;
+            Delimiter = _defaultDelimiter;
+            Escape = _defaultEscape;
+            Quote = _defaultQuote;
         }
 
         public Dictionary<string, List<string>> ParseBuffer(string buffer)
         {
-            return Parse(new StringReader(buffer)); 
+            return Parse(new StringReader(buffer));
         }
 
         public Dictionary<string, List<string>> Parse(TextReader sr)
@@ -74,37 +72,37 @@ namespace CFI.Utility.CVS
             Dictionary<string, List<string>> data = new Dictionary<string, List<string>>();
             try
             {
-                    List<string> header = null;
-                    String line;
-                    // Read and display lines from the file until the end of
-                    // the file is reached.
-                    int lineCount = 0;
-                    while ((line = sr.ReadLine()) != null)
+                List<string> header = null;
+                string line;
+                // Read and display lines from the file until the end of
+                // the file is reached.
+                int lineCount = 0;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    List<string> items = parseLine(line);
+                    if (data.Count == 0)
                     {
-                        List<string> items = parseLine(line);
-                        if (data.Count == 0)
+                        // add headers
+                        header = items;
+                        foreach (string item in items)
                         {
-                            // add headers
-                            header = items;
-                            foreach (string item in items)
-                            {
-                                data.Add(item, new List<string>());
-                            }
+                            data.Add(item, new List<string>());
                         }
-                        else if (data.Count == items.Count)
-                        {
-                            for (int index = 0; index < items.Count; index++)
-                            {
-                                data[header[index]].Add(items[index]);
-                            }
-                        }
-                        else
-                        {
-                            Logger.LogError("CVS Reader: LIne: " + lineCount);
-                        }
-                        lineCount++;
                     }
-                    sr.Close();
+                    else if (data.Count == items.Count)
+                    {
+                        for (int index = 0; index < items.Count; index++)
+                        {
+                            data[header[index]].Add(items[index]);
+                        }
+                    }
+                    else
+                    {
+                        Logger.LogError("CVS Reader: LIne: " + lineCount);
+                    }
+                    lineCount++;
+                }
+                sr.Close();
             }
 
             catch (Exception ex)
@@ -134,31 +132,31 @@ namespace CFI.Utility.CVS
             }
             return data;
         }
-       
+
         private List<string> parseLine(string line)
         {
             string temp = line;
             List<string> items = new List<string>();
 
-            if (temp[0] != this.Comment)
+            if (temp[0] != Comment)
             {
-                if (temp.EndsWith(this.Quote.ToString()))
+                if (temp.EndsWith(Quote.ToString()))
                 {
-                    temp = temp.TrimEnd(this.Quote);
+                    temp = temp.TrimEnd(Quote);
 
                 }
-                if (temp.EndsWith(this.Delimiter.ToString()))
+                if (temp.EndsWith(Delimiter.ToString()))
                 {
-                    temp += this.Quote;
+                    temp += Quote;
                 }
 
                 while (!string.IsNullOrEmpty(temp))
                 {
-                    string delimeter = this.Delimiter.ToString(); ;
-                    if (temp[0] == this.Quote)
+                    string delimeter = Delimiter.ToString(); ;
+                    if (temp[0] == Quote)
                     {
                         temp = temp.Substring(1);
-                        delimeter = this.Quote.ToString() + this.Delimiter.ToString();
+                        delimeter = Quote.ToString() + Delimiter.ToString();
                     }
 
                     int index = temp.IndexOf(delimeter);
@@ -170,7 +168,7 @@ namespace CFI.Utility.CVS
                     }
                     else
                     {
-                        temp = string.Empty ;
+                        temp = string.Empty;
                     }
                     items.Add(item);
 

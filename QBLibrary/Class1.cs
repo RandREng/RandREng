@@ -1,19 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml;
 using Interop.QBXMLRP2;
-using System.Runtime.InteropServices;
-using System.Diagnostics;
 //using RandREng.QBLibrary.QBServer;
-using System.ServiceModel;
 using Microsoft.Extensions.Logging;
 using CFI.Utility.Logging;
 
 
 namespace RandREng.QBLibrary
 {
-	public interface IQBProcessor : IDisposable
+    public interface IQBProcessor : IDisposable
 	{
 		string Transmit(string request);
 		string MaxVersion { get; }

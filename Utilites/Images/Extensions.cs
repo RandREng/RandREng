@@ -1,23 +1,13 @@
 ﻿using Microsoft.Extensions.Logging;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats;
-using SixLabors.ImageSharp.Formats.Png;
-using SixLabors.ImageSharp.Processing;
-using SixLabors.ImageSharp.PixelFormats;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 //using CFI.Utility.Logging;
-using ZXing;
 
-namespace CFI.Utility.Images
+namespace RandREng.Utility.Images
 {
 	public static class Extensions
 	{
@@ -26,7 +16,7 @@ namespace CFI.Utility.Images
 		/// </summary>
 		/// <param name="str"></param>
 		/// <returns></returns>
-		public static Bitmap ScaleImage(this System.Drawing.Image image, int dpi)
+		public static Bitmap ScaleImage(this Image image, int dpi)
 		{
 			var ratioX = (double)dpi / image.HorizontalResolution;
 			var ratioY = (double)dpi / image.VerticalResolution;
@@ -36,11 +26,11 @@ namespace CFI.Utility.Images
 			var newHeight = (int)(image.Height * ratioY);
 
 			var newImage = new Bitmap(newWidth, newHeight);
-			newImage.SetResolution((float)dpi, (float)dpi);
+			newImage.SetResolution(dpi, dpi);
 			Graphics g = Graphics.FromImage(newImage);
 			g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;
 			g.DrawImage(image, 0, 0, newWidth, newHeight);
-	
+
 			MemoryStream ms = new MemoryStream();
 			newImage.Save(ms, ImageFormat.Tiff);
 			ms.Flush();

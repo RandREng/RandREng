@@ -1,16 +1,13 @@
 ﻿using Microsoft.Extensions.Logging;
-using RandREng.QBLibrary;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
 namespace RandREng.QBLibrary
 {
-	public class QBCom : IDisposable
+    public class QBCom : IDisposable
 	{
 		private RandREng.QBLibrary.IQBProcessor process ;
 		private ILogger Logger { get; set; }

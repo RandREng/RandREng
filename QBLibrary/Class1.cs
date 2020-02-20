@@ -1,5 +1,5 @@
 ﻿using System;
-using Interop.QBXMLRP2;
+//using Interop.QBXMLRP2;
 //using RandREng.QBLibrary.QBServer;
 using Microsoft.Extensions.Logging;
 using CFI.Utility.Logging;
@@ -276,90 +276,92 @@ namespace RandREng.QBLibrary
 		}
 		#endregion
 
-		private RequestProcessor2 rp;
+//		private RequestProcessor2 rp;
 		private string ticket;
 		public string MaxVersion { get; set; }
 		public string CompanyFile { get; set; }
 		public string AppID { get; set; }
 		public string AppName { get; set; }
-		private readonly Interop.QBXMLRP2.QBFileMode mode = Interop.QBXMLRP2.QBFileMode.qbFileOpenDoNotCare;
+//		private readonly Interop.QBXMLRP2.QBFileMode mode = Interop.QBXMLRP2.QBFileMode.qbFileOpenDoNotCare;
 
 		public bool CanConnect
 		{
 			get 
 			{
-				ConnectToQB();
-				return this.rp != null;
+				return false;
+//				ConnectToQB();
+//				return this.rp != null;
 			}
 		}
 		// CONNECTION TO QB
 		private void ConnectToQB()
 		{
-			if (rp == null)
-			{
-				try
-				{
-					rp = new RequestProcessor2Class();
-					rp.OpenConnection2(AppID, AppName, QBXMLRPConnectionType.localQBD);
-					if (CompanyFile == null)
-					{
-						CompanyFile = string.Empty;
-					}
-					ticket = rp.BeginSession(CompanyFile, mode);
-					string[] versions = (string[])rp.get_QBXMLVersionsForSession(ticket);
-					MaxVersion = versions[versions.Length - 1];
-				}
-				catch (Exception e)
-				{
-					Logger.LogCritical(e);
-					DisconnectFromQB();
-				}
-			}
+			//if (rp == null)
+			//{
+			//	try
+			//	{
+			//		rp = new RequestProcessor2Class();
+			//		rp.OpenConnection2(AppID, AppName, QBXMLRPConnectionType.localQBD);
+			//		if (CompanyFile == null)
+			//		{
+			//			CompanyFile = string.Empty;
+			//		}
+			//		ticket = rp.BeginSession(CompanyFile, mode);
+			//		string[] versions = (string[])rp.get_QBXMLVersionsForSession(ticket);
+			//		MaxVersion = versions[versions.Length - 1];
+			//	}
+			//	catch (Exception e)
+			//	{
+			//		Logger.LogCritical(e);
+			//		DisconnectFromQB();
+			//	}
+			//}
 		}
 
 		public void DisconnectFromQB()
 		{
-			if (ticket != null)
-			{
-				try
-				{
-					rp.EndSession(ticket);
-					ticket = null;
-				}
-				catch (Exception e)
-				{
-					Logger.LogCritical(e);
-				}
-			}
-			if (rp != null)
-			{
-				try
-				{
-					rp.CloseConnection();
-					rp = null;
-				}
-				catch (Exception e)
-				{
-					Logger.LogCritical(e);
-				}
-			}
+			//if (ticket != null)
+			//{
+			//	try
+			//	{
+			//		rp.EndSession(ticket);
+			//		ticket = null;
+			//	}
+			//	catch (Exception e)
+			//	{
+			//		Logger.LogCritical(e);
+			//	}
+			//}
+			//if (rp != null)
+			//{
+			//	try
+			//	{
+			//		rp.CloseConnection();
+			//		rp = null;
+			//	}
+			//	catch (Exception e)
+			//	{
+			//		Logger.LogCritical(e);
+			//	}
+			//}
 		}
 
 
 		public string Transmit(string request)
 		{
-			try
-			{
-				this.ConnectToQB();
-				string resp = rp.ProcessRequest(ticket, request);
-				//				this.disconnectFromQB();
-				return resp;
-			}
-			catch (Exception e)
-			{
-				Logger.LogCritical(e);
-				return null;
-			}
+			return null;
+			//try
+			//{
+			//	this.ConnectToQB();
+			//	string resp = rp.ProcessRequest(ticket, request);
+			//	//				this.disconnectFromQB();
+			//	return resp;
+			//}
+			//catch (Exception e)
+			//{
+			//	Logger.LogCritical(e);
+			//	return null;
+			//}
 		}
 	}
 

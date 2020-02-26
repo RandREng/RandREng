@@ -4,7 +4,7 @@ using System.Runtime.Serialization.Formatters.Binary; // For serialization of an
 using System.IO;				 // For reading/writing data to an XML file.
 using System.IO.IsolatedStorage; // For accessing user isolated data.
 
-namespace CFI.InstallationManager.ReportPlugin
+namespace IM.ReportPlugin
 {
 
     /// <summary>

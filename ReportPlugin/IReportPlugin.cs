@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CFI.InstallationManager.ReportPlugin
+namespace IM.ReportPlugin
 {
     public interface IReportPlugin : IDisposable
     {

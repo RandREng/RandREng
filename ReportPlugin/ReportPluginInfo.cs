@@ -8,7 +8,7 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using CFI.Utility.Logging;
 
-namespace CFI.InstallationManager.ReportPlugin
+namespace IM.ReportPlugin
 {
     public class ReportPluginInfo : IDisposable
     {

@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>
-    <Copyright>Copyright 2000 - 2020, R &amp; R Engineering, Inc.</Copyright>
+    <Copyright>2000 - 2020 R &amp; R Engineering, LLC a Georgia Company</Copyright>
     <Description>Utility Functionality</Description>
   </PropertyGroup>
 

@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+    <Copyright>2000 - 2020 R &amp; R Engineering, LLC a Georgia Company</Copyright>
   </PropertyGroup>
 
   <ItemGroup>

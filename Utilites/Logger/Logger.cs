@@ -1,7 +1,8 @@
 using Microsoft.Extensions.Logging;
+using RandREng.Utility.Logger;
 using System;
 
-namespace CFI.Utility.Logging
+namespace RandREng.Utility.Logger
 {
     public static class Extensions
     {

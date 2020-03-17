@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Management;
-using CFI.Utility.Logging;
 using System.Diagnostics;
 using Microsoft.Extensions.Logging;
+using RandREng.Utility.Logger;
 
 namespace RandREng.Utility.Printer
 {

@@ -5,7 +5,6 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-//using CFI.Utility.Logging;
 
 namespace RandREng.Utility.Images
 {

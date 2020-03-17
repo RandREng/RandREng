@@ -1,10 +1,36 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Threading;
 
 namespace RandREng.Utility.Assembly
 {
     public class VersionInfo
     {
+
+        public static string GetBuildDateTime(string VersionNumber)
+        {
+            // VersionNumber is Major.Minor.Build.Revision
+            // Build is equal to the number of days since January 1, 2000, local time
+            // Revision is equal to the number of seconds since midnight, January 1, 2000, local time, divided by 2.
+
+            string buildDateTime = string.Empty;
+
+            string[] versionInfo = VersionNumber.Split('.');
+            if (versionInfo.Length == 4)
+            {
+                DateTime buildDT = new DateTime(1980, 1, 1);
+                double days = Convert.ToDouble(versionInfo[2]);
+                //                System.Double seconds = Convert.ToDouble(versionInfo[3]) * 2;
+                //                buildDT = buildDT.AddSeconds(seconds);
+                buildDT = buildDT.AddDays(days);
+                //              if (DateTime.Now.IsDaylightSavingTime())
+                //                buildDT = buildDT.ToUniversalTime().ToLocalTime();
+                buildDateTime = buildDT.ToShortDateString();
+            }
+
+            return buildDateTime;
+        }
+
         static public string GetCopyright()
         {
             System.Reflection.Assembly asm = System.Reflection.Assembly.GetEntryAssembly();

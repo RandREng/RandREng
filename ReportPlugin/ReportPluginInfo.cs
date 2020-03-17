@@ -6,7 +6,7 @@ using System.IO;
 using System.Reflection;
 using System.Linq;
 using Microsoft.Extensions.Logging;
-using CFI.Utility.Logging;
+using RandREng.Utility.Logger;
 
 namespace IM.ReportPlugin
 {

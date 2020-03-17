@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using CFI.Utility.Logging;
 using System.Net.Mail;
 using System.Net;
 using System.Net.Mime;
@@ -8,7 +7,8 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using CFI.Utility;
+using RandREng.Utility.Logger;
+using RandREng.Utility.AppSettings;
 
 namespace RandREng.Utility.Mail
 {
@@ -89,20 +89,20 @@ namespace RandREng.Utility.Mail
 
         public Mailer(ILogger logger)
         {
-            SMTPServer = AppSettings.GetAppSetting("SMTPServer", "");
-            Port = AppSettings.GetAppSetting("SMTPServerPort", 25);
-            UseSSL = AppSettings.GetAppSetting("UseSSL", false);
-            AuthAccount = AppSettings.GetAppSetting("AuthAccount", "");
-            AuthPasswrd = AppSettings.GetAppSetting("AuthPasswrd", "");
+            SMTPServer = RandREng.Utility.AppSettings.AppSettings.GetAppSetting("SMTPServer", "");
+            Port = RandREng.Utility.AppSettings.AppSettings.GetAppSetting("SMTPServerPort", 25);
+            UseSSL = RandREng.Utility.AppSettings.AppSettings.GetAppSetting("UseSSL", false);
+            AuthAccount = RandREng.Utility.AppSettings.AppSettings.GetAppSetting("AuthAccount", "");
+            AuthPasswrd = RandREng.Utility.AppSettings.AppSettings.GetAppSetting("AuthPasswrd", "");
 
-            string ToAddress = AppSettings.GetAppSetting("ToAddress", "");
+            string ToAddress = RandREng.Utility.AppSettings.AppSettings.GetAppSetting("ToAddress", "");
             if (IsValidEmail(ToAddress))
             {
                 Logger.Log(LogLevel.Debug, string.Format("Adding address: {0}", ToAddress));
                 ToAddresses.Add(ToAddress);
             }
-            FromAddress = AppSettings.GetAppSetting("FromAddress", "");
-            FromFriendlyName = AppSettings.GetAppSetting("FromFriendlyName", "");
+            FromAddress = RandREng.Utility.AppSettings.AppSettings.GetAppSetting("FromAddress", "");
+            FromFriendlyName = RandREng.Utility.AppSettings.AppSettings.GetAppSetting("FromFriendlyName", "");
 
             Logger = logger;
             BodyIsHtml = false;

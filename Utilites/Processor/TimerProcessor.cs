@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading;
 using System.Collections;
-using CFI.Utility.Logging;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using RandREng.Utility.Logger;
 
 namespace RandREng.Utility.Processor
 {

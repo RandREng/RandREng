@@ -2,7 +2,7 @@
 using System.Configuration;
 using System.Collections.Specialized;
 
-namespace CFI.Utility
+namespace RandREng.Utility.AppSettings
 {
     public class AppSettings
     {
@@ -47,7 +47,7 @@ namespace CFI.Utility
 
             List<string> Values = new List<string>();
 
-            for (; temp != null; )
+            for (; temp != null;)
             {
                 temp = ConfigurationManager.AppSettings[strSettingName + Index.ToString()];
                 if (temp != null)

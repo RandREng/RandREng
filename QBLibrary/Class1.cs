@@ -2,7 +2,7 @@
 //using Interop.QBXMLRP2;
 //using RandREng.QBLibrary.QBServer;
 using Microsoft.Extensions.Logging;
-using CFI.Utility.Logging;
+using RandREng.Utility.Logger;
 
 
 namespace RandREng.QBLibrary

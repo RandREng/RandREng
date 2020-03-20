@@ -23,11 +23,4 @@ namespace RandREng.Utility.Documents
 
         string FileName { get; set; }
     }
-
-    public enum Orientation
-    {
-        Any,
-        Portrait,
-        Landscape,
-    }
 }

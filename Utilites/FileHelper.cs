@@ -1,8 +1,5 @@
 ﻿using System.IO;
 
-
-
-
 namespace RandREng.Utility
 {
     public class FileHelper

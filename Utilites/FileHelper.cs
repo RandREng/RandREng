@@ -119,19 +119,8 @@ namespace RandREng.Utility
 
         public static string UniqueFileName(string fileName, out string LastFilename)
         {
-            int Count = 1;
-            string BaseFileName = Path.GetFileNameWithoutExtension(fileName);
-            string Ext = Path.GetExtension(fileName);
             string DestPath = Path.GetDirectoryName(fileName);
-            string DestFilename = Path.Combine(DestPath, Path.GetFileName(fileName));
-            LastFilename = "";
-            while (File.Exists(DestFilename))
-            {
-                LastFilename = DestFilename;
-                DestFilename = Path.Combine(DestPath, BaseFileName + "_" + Count + Ext);
-                Count++;
-            }
-            return DestFilename;
+            return UniqueFileName(fileName, DestPath, out LastFilename);
         }
 
         public static string UniqueFileName(string fileName, string DestPath, out string LastFilename)
@@ -150,6 +139,5 @@ namespace RandREng.Utility
             return DestFilename;
         }
     }
-
 
 }

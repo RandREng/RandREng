@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace RandREng.Common
 {
-    public static class OptionBuilderExt
+	public static class OptionBuilderExt
 	{
 		public static DbContextOptionsBuilder ConfigureFromSettings<T>(this DbContextOptionsBuilder optionsBuilder, IConfiguration configuration) where T : DbContext
 		{

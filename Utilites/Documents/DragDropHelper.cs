@@ -427,12 +427,14 @@ namespace RandREng.Utility.Documents
             public MemoryStream GetData(string format, int index)
             {
                 //create a FORMATETC struct to request the data with
-                FORMATETC formatetc = new FORMATETC();
-                formatetc.cfFormat = (short)DataFormats.GetFormat(format).Id;
-                formatetc.dwAspect = DVASPECT.DVASPECT_CONTENT;
-                formatetc.lindex = index;
-                formatetc.ptd = new IntPtr(0);
-                formatetc.tymed = TYMED.TYMED_ISTREAM | TYMED.TYMED_ISTORAGE | TYMED.TYMED_HGLOBAL;
+                FORMATETC formatetc = new FORMATETC
+                {
+                    cfFormat = (short)DataFormats.GetFormat(format).Id,
+                    dwAspect = DVASPECT.DVASPECT_CONTENT,
+                    lindex = index,
+                    ptd = new IntPtr(0),
+                    tymed = TYMED.TYMED_ISTREAM | TYMED.TYMED_ISTORAGE | TYMED.TYMED_HGLOBAL
+                };
 
                 //create STGMEDIUM to output request results into
                 STGMEDIUM medium = new STGMEDIUM();

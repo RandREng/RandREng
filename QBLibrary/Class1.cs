@@ -277,7 +277,7 @@ namespace RandREng.QBLibrary
 		#endregion
 
 //		private RequestProcessor2 rp;
-		private string ticket;
+//		private string ticket;
 		public string MaxVersion { get; set; }
 		public string CompanyFile { get; set; }
 		public string AppID { get; set; }

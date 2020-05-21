@@ -97,8 +97,7 @@ namespace RandREng.Utility
                 Directory.CreateDirectory(DestPath);
             }
 
-            string LastFilename = "";
-            string DestFilename = UniqueFileName(sourceFile.Name, DestPath, out LastFilename);
+            string DestFilename = UniqueFileName(sourceFile.Name, DestPath, out string LastFilename);
 
             if (Unique && !string.IsNullOrEmpty(LastFilename))
             {

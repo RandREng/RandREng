@@ -47,8 +47,10 @@ namespace RandREng.Utility.Images
 			FormatConvertedBitmap formatConvertedBitmap = new FormatConvertedBitmap(bi, PixelFormats.Indexed1, BitmapPalettes.BlackAndWhite, .5);
 
 			MemoryStream ms2 = new MemoryStream();
-			TiffBitmapEncoder encoder = new TiffBitmapEncoder();
-			encoder.Compression = TiffCompressOption.None;
+			TiffBitmapEncoder encoder = new TiffBitmapEncoder
+			{
+				Compression = TiffCompressOption.None
+			};
 			encoder.Frames.Add(BitmapFrame.Create(formatConvertedBitmap));
 			encoder.Save(ms2);
 

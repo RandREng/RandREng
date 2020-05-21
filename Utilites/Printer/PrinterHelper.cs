@@ -140,8 +140,10 @@ namespace RandREng.Utility.Printer
             bool bOk = false;
             using (Process myProcess = new Process())
             {
-                ProcessStartInfo startInfo = new ProcessStartInfo(filename);
-                startInfo.Verb = "print";
+                ProcessStartInfo startInfo = new ProcessStartInfo(filename)
+                {
+                    Verb = "print"
+                };
                 myProcess.StartInfo = startInfo;
                 myProcess.Start();
                 //                myProcess.WaitForExit();

@@ -17,13 +17,15 @@ namespace RandREng.QBLibrary
 
 		public QBCom(string appID, string appName, string companyFile, ILogger logger)
 		{
-			process = new RandREng.QBLibrary.QBProcessor(logger);
-			process.AppID = appID;
-			process.AppName = appName;
-			process.CompanyFile = companyFile;
+            process = new RandREng.QBLibrary.QBProcessor(logger)
+            {
+                AppID = appID,
+                AppName = appName,
+                CompanyFile = companyFile
+            };
 
-			//Create our own namespaces for the output
-			ns = new XmlSerializerNamespaces();
+            //Create our own namespaces for the output
+            ns = new XmlSerializerNamespaces();
 
 			//Add an empty namespace and empty value
 			ns.Add("", "");
@@ -34,10 +36,12 @@ namespace RandREng.QBLibrary
 
 		public QBXMLMsgsRs Transmit<T>(object txx, out T resp)
 		{
-			QBXML req = new QBXML();
-			req.ItemsElementName = new ItemsChoiceType103[] { ItemsChoiceType103.QBXMLMsgsRq };
-			req.Items = new object[] { new QBXMLMsgsRq() };
-			QBXMLMsgsRq r = req.Items[0] as QBXMLMsgsRq;
+            QBXML req = new QBXML
+            {
+                ItemsElementName = new ItemsChoiceType103[] { ItemsChoiceType103.QBXMLMsgsRq },
+                Items = new object[] { new QBXMLMsgsRq() }
+            };
+            QBXMLMsgsRq r = req.Items[0] as QBXMLMsgsRq;
 			r.onError = QBXMLMsgsRqOnError.stopOnError;
 			r.Items = new object[] { txx };
 
@@ -99,15 +103,23 @@ namespace RandREng.QBLibrary
 
 		public QBXMLMsgsRs buildInvoiceAddRqXML(string customer, DateTime txnDate, string refNumber)
 		{
-			InvoiceAddRqType req = new InvoiceAddRqType();
-			req.InvoiceAdd = new InvoiceAdd();
-			req.InvoiceAdd.TemplateRef = new TemplateRef();
-			req.InvoiceAdd.TemplateRef.FullName = customer;
-			req.InvoiceAdd.CustomerRef = new CustomerRef();
-			req.InvoiceAdd.CustomerRef.FullName = customer;
-			req.InvoiceAdd.Other = "tttt";
+            InvoiceAddRqType req = new InvoiceAddRqType
+            {
+                InvoiceAdd = new InvoiceAdd
+                {
+                    TemplateRef = new TemplateRef
+                    {
+                        FullName = customer
+                    },
+                    CustomerRef = new CustomerRef
+                    {
+                        FullName = customer
+                    },
+                    Other = "tttt"
+                }
+            };
 
-			if (txnDate != null)
+            if (txnDate != null)
 			{
 				req.InvoiceAdd.TxnDate = txnDate.ToString("yyyy-MM-dd");
 			}
@@ -204,25 +216,37 @@ namespace RandREng.QBLibrary
 
 			List<InvoiceLineAdd> lineItems = new List<InvoiceLineAdd>();
 
-			InvoiceLineAdd line = new InvoiceLineAdd();
-//			ItemRef 
-			line.ItemRef = new ItemRef();
-			line.ItemRef.FullName = "Labor";
-			line.Desc = "Test";
-			line.ClassRef = new ClassRef();
-			line.ClassRef.FullName = "Home Depot:Atlanta:Hard Surface";
-			line.Amount = "123456.78";
-			line.IsTaxable = "false";
-			lineItems.Add(line);
-			line = new InvoiceLineAdd();
-			line.ItemRef = new ItemRef();
-			line.ItemRef.FullName = "Back Charge";
-			line.Desc = "Smith James";
-			line.ClassRef = new ClassRef();
-			line.ClassRef.FullName = "Home Depot:Atlanta:Hard Surface";
-			line.Amount = "-543.21";
-			line.IsTaxable = "false";
-			lineItems.Add(line);
+            InvoiceLineAdd line = new InvoiceLineAdd
+            {
+                //			ItemRef 
+                ItemRef = new ItemRef
+                {
+                    FullName = "Labor"
+                },
+                Desc = "Test",
+                ClassRef = new ClassRef
+                {
+                    FullName = "Home Depot:Atlanta:Hard Surface"
+                },
+                Amount = "123456.78",
+                IsTaxable = "false"
+            };
+            lineItems.Add(line);
+            line = new InvoiceLineAdd
+            {
+                ItemRef = new ItemRef
+                {
+                    FullName = "Back Charge"
+                },
+                Desc = "Smith James",
+                ClassRef = new ClassRef
+                {
+                    FullName = "Home Depot:Atlanta:Hard Surface"
+                },
+                Amount = "-543.21",
+                IsTaxable = "false"
+            };
+            lineItems.Add(line);
 			req.InvoiceAdd.Items = lineItems.ToArray(); ;
 
 

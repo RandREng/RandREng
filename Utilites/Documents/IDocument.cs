@@ -14,8 +14,8 @@ namespace RandREng.Utility.Documents
         Bitmap GetImage(int index);
 
         //       void Split(string fileName);
-        void Save(Bitmap bm, string filename, RotateFlipType rotate);
-        void Save(Bitmap bm, string filename);
+//        void Save(Bitmap bm, string filename, RotateFlipType rotate);
+//        void Save(Bitmap bm, string filename);
 
         void Add(Bitmap bm);
         void Add(Bitmap bm, RotateFlipType rotate);

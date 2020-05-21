@@ -113,8 +113,10 @@ namespace RandREng.Utility.Processor
                 }
                 Producer(DateTime.Now);
 
-                m_BaseTimer = new System.Timers.Timer();
-                m_BaseTimer.Interval = Interval;
+                m_BaseTimer = new System.Timers.Timer
+                {
+                    Interval = Interval
+                };
                 m_BaseTimer.Elapsed += new System.Timers.ElapsedEventHandler(m_BaseTimer_Elapsed);
                 m_BaseTimer.Enabled = true;
 

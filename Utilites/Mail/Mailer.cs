@@ -73,9 +73,11 @@ namespace RandREng.Utility.Mail
                 {
                     if (!string.IsNullOrEmpty(SMTPServer))
                     {
-                        client = new SmtpClient(SMTPServer, Port);
-                        client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                        client.EnableSsl = UseSSL;
+                        client = new SmtpClient(SMTPServer, Port)
+                        {
+                            DeliveryMethod = SmtpDeliveryMethod.Network,
+                            EnableSsl = UseSSL
+                        };
                     }
                 }
                 return client;

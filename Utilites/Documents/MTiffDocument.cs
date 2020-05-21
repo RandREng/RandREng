@@ -75,9 +75,11 @@ namespace RandREng.Utility.Documents
 
 					using (FileStream splitFiles = new FileStream(outName, FileMode.Create))
 					{
-						TiffBitmapEncoder encoder = new TiffBitmapEncoder();
-						encoder.Compression = TiffCompressOption.Ccitt4;
-						List<ColorContext> c = new List<ColorContext>();
+                        TiffBitmapEncoder encoder = new TiffBitmapEncoder
+                        {
+                            Compression = TiffCompressOption.Ccitt4
+                        };
+                        List<ColorContext> c = new List<ColorContext>();
 						c.Add(new ColorContext(PixelFormats.BlackWhite));
 						encoder.ColorContexts = new System.Collections.ObjectModel.ReadOnlyCollection<ColorContext>(c);
 						encoder.Frames.Add(decoder.Frames[_i]);
@@ -109,9 +111,11 @@ namespace RandREng.Utility.Documents
 
 			if (encoder == null)
 			{
-				encoder = new TiffBitmapEncoder();
-				encoder.Compression = TiffCompressOption.Ccitt4;
-			}
+                encoder = new TiffBitmapEncoder
+                {
+                    Compression = TiffCompressOption.Ccitt4
+                };
+            }
 			using (MemoryStream mem = new MemoryStream())
 			{
 				// Lock the bitmap's bits.  
@@ -155,12 +159,14 @@ namespace RandREng.Utility.Documents
 					image.RotateFlip(rotate);
 				}
 
-				TiffBitmapEncoder _encoder = new TiffBitmapEncoder();
-				_encoder.Compression = TiffCompressOption.Ccitt4;
+                TiffBitmapEncoder _encoder = new TiffBitmapEncoder
+                {
+                    Compression = TiffCompressOption.Ccitt4
+                };
 
 
-				// Lock the bitmap's bits.  
-				Rectangle rect = new Rectangle(0, 0, image.Width, image.Height);
+                // Lock the bitmap's bits.  
+                Rectangle rect = new Rectangle(0, 0, image.Width, image.Height);
 				BitmapData bmpData = image.LockBits(rect, ImageLockMode.ReadWrite, image.PixelFormat);
 
 				// Get the address of the first line.

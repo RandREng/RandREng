@@ -57,12 +57,12 @@ namespace ReportServerBarcode
 					Margin = margin
 				}
 			};
-			var pixelData = barcodeWriter.Write(contents);
+            ZXing.Rendering.PixelData pixelData = barcodeWriter.Write(contents);
 			// creating a bitmap from the raw pixel data; if only black and white colors are used it makes no difference
 			// that the pixel data ist BGRA oriented and the bitmap is initialized with RGB
-			using (var bitmap = new System.Drawing.Bitmap(pixelData.Width, pixelData.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb))
+			using (System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(pixelData.Width, pixelData.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb))
 			{
-				var bitmapData = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, pixelData.Width, pixelData.Height),
+                BitmapData bitmapData = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, pixelData.Width, pixelData.Height),
 				System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
 				try
 				{

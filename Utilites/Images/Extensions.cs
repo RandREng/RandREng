@@ -17,14 +17,14 @@ namespace RandREng.Utility.Images
 		/// <returns></returns>
 		public static Bitmap ScaleImage(this Image image, int dpi)
 		{
-			var ratioX = (double)dpi / image.HorizontalResolution;
-			var ratioY = (double)dpi / image.VerticalResolution;
-			var ratio = Math.Min(ratioX, ratioY);
+            double ratioX = (double)dpi / image.HorizontalResolution;
+            double ratioY = (double)dpi / image.VerticalResolution;
+            double ratio = Math.Min(ratioX, ratioY);
 
-			var newWidth = (int)(image.Width * ratioX);
-			var newHeight = (int)(image.Height * ratioY);
+            int newWidth = (int)(image.Width * ratioX);
+            int newHeight = (int)(image.Height * ratioY);
 
-			var newImage = new Bitmap(newWidth, newHeight);
+            Bitmap newImage = new Bitmap(newWidth, newHeight);
 			newImage.SetResolution(dpi, dpi);
 			Graphics g = Graphics.FromImage(newImage);
 			g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;

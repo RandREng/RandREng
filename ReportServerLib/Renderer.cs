@@ -49,7 +49,7 @@ namespace RandREng.ReportServer
             string deviceInfo = "<DeviceInfo><Toolbar>False</Toolbar></DeviceInfo>";
             RenderRequest renderReq = new RenderRequest(loadReport.ExecutionHeader, trustedUserHeader, format, deviceInfo);
             // Now, similar to the above task, we will call the RenderAsync() method and await its result
-            var taskRender = await rsExec.RenderAsync(renderReq);
+            RenderResponse taskRender = await rsExec.RenderAsync(renderReq);
 
 
             return taskRender.Result;

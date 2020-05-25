@@ -13,17 +13,17 @@ namespace RandREng.Paging.EFCore
 
         public static async Task<PagedResult<T>> GetPagedAsync<T>(this IQueryable<T> query, int page, int pageSize) where T : class
         {
-            var result = new PagedResult<T>
+            PagedResult<T> result = new PagedResult<T>
             {
                 CurrentPage = page,
                 PageSize = pageSize,
                 RowCount = await query.CountAsync()
             };
 
-            var pageCount = (double)result.RowCount / pageSize;
+            double pageCount = (double)result.RowCount / pageSize;
             result.PageCount = (int)Math.Ceiling(pageCount);
 
-            var skip = (page - 1) * pageSize;
+            int skip = (page - 1) * pageSize;
             result.Results = await query.Skip(skip)
                 .Take(pageSize)
                 .ToListAsync();
@@ -33,17 +33,17 @@ namespace RandREng.Paging.EFCore
 
         public static async Task<PagedResult<U>> GetPagedAsync<T, U>(this IQueryable<T> query, int page, int pageSize) where U : class
         {
-            var result = new PagedResult<U>
+            PagedResult<U> result = new PagedResult<U>
             {
                 CurrentPage = page,
                 PageSize = pageSize,
                 RowCount = await query.CountAsync()
             };
 
-            var pageCount = (double)result.RowCount / pageSize;
+            double pageCount = (double)result.RowCount / pageSize;
             result.PageCount = (int)Math.Ceiling(pageCount);
 
-            var skip = (page - 1) * pageSize;
+            int skip = (page - 1) * pageSize;
             result.Results = await query.Skip(skip)
                                         .Take(pageSize)
                                         .ProjectTo<U>(Config)

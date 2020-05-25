@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Drawing.Common" Version="5.0.0-preview.3.20214.6" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.0-preview.4.20251.6" />
     <PackageReference Include="ZXing.Net" Version="0.16.5" />
   </ItemGroup>
 

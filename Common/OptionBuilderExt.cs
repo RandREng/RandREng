@@ -7,16 +7,16 @@ namespace RandREng.Common
 {
 	public static class OptionBuilderExt
 	{
-		public static DbContextOptionsBuilder ConfigureFromSettings<T>(this DbContextOptionsBuilder optionsBuilder, IConfiguration configuration) where T : DbContext
+		public static DbContextOptionsBuilder ConfigureFromSettings<T>(this DbContextOptionsBuilder optionsBuilder, IConfiguration configuration, string instance) where T : DbContext
 		{
 			bool.TryParse(configuration["InMemoryDB"], out bool inMemory);
 			if (inMemory)
 			{
-				optionsBuilder.ConfigureInMemory<T>(configuration["ConnectionString"]);
+				optionsBuilder.ConfigureInMemory<T>(instance);
 			}
 			else
 			{
-				optionsBuilder.ConfigureSqlServer<T>(configuration["ConnectionString"]);
+				optionsBuilder.ConfigureSqlServer<T>(configuration.GetConnectionString(instance));
 			}
 			return optionsBuilder;
 		}

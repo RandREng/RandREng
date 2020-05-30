@@ -9,8 +9,6 @@ namespace RandREng.Paging.EFCore
 {
     public static class PagedResultEFCoreExtensions 
     {
-        static public MapperConfiguration Config { set; get; }
-
         public static async Task<PagedResult<T>> GetPagedAsync<T>(this IQueryable<T> query, int page, int pageSize) where T : class
         {
             PagedResult<T> result = new PagedResult<T>
@@ -31,7 +29,7 @@ namespace RandREng.Paging.EFCore
             return result;
         }
 
-        public static async Task<PagedResult<U>> GetPagedAsync<T, U>(this IQueryable<T> query, int page, int pageSize) where U : class
+        public static async Task<PagedResult<U>> GetPagedAsync<T, U>(this IQueryable<T> query, int page, int pageSize, IConfigurationProvider config) where U : class
         {
             PagedResult<U> result = new PagedResult<U>
             {
@@ -46,7 +44,7 @@ namespace RandREng.Paging.EFCore
             int skip = (page - 1) * pageSize;
             result.Results = await query.Skip(skip)
                                         .Take(pageSize)
-                                        .ProjectTo<U>(Config)
+                                        .ProjectTo<U>(config)
                                         .ToListAsync();
             return result;
         }

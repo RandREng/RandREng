@@ -75,7 +75,7 @@ namespace RandREng.Utility.Processor
 
         virtual protected void Init()
         {
-            WriteEventLog("Initializing Processor...");
+//            WriteEventLog("Initializing Processor...");
         }
 
         virtual protected void Consumer(object o)
@@ -145,12 +145,12 @@ namespace RandREng.Utility.Processor
             Producer(e.SignalTime);
         }
 
-        protected void WriteEventLog(string message)
-        {
-#if !DEBUG
-            CFI.Utility.Logging.Logger.WriteEventLog(this.EventSource, message);
-#endif
-        }
+//        protected void WriteEventLog(string message)
+//        {
+//#if !DEBUG
+//            CFI.Utility.Logging.Logger.WriteEventLog(this.EventSource, message);
+//#endif
+//        }
 
         protected class ProcessQueue
         {

@@ -3,8 +3,6 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace RandREng.Utility.Images
 {
@@ -34,31 +32,35 @@ namespace RandREng.Utility.Images
 			newImage.Save(ms, ImageFormat.Tiff);
 			ms.Flush();
 			ms.Seek(0, SeekOrigin.Begin);
-			BitmapImage bi = new BitmapImage();
+			Bitmap bm = new Bitmap(ms);
+			return bm;
 
-			// Begin initialization.
-			bi.BeginInit();
 
-			bi.CacheOption = BitmapCacheOption.OnDemand;
-			bi.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
-			bi.StreamSource = ms;
-			bi.EndInit();
+			//BitmapImage bi = new BitmapImage();
 
-			FormatConvertedBitmap formatConvertedBitmap = new FormatConvertedBitmap(bi, PixelFormats.Indexed1, BitmapPalettes.BlackAndWhite, .5);
+			//// Begin initialization.
+			//bi.BeginInit();
 
-			MemoryStream ms2 = new MemoryStream();
-			TiffBitmapEncoder encoder = new TiffBitmapEncoder
-			{
-				Compression = TiffCompressOption.None
-			};
-			encoder.Frames.Add(BitmapFrame.Create(formatConvertedBitmap));
-			encoder.Save(ms2);
+			//bi.CacheOption = BitmapCacheOption.OnDemand;
+			//bi.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+			//bi.StreamSource = ms;
+			//bi.EndInit();
 
-			ms2.Flush();
-			ms2.Seek(0, SeekOrigin.Begin);
+			//FormatConvertedBitmap formatConvertedBitmap = new FormatConvertedBitmap(bi, PixelFormats.Indexed1, BitmapPalettes.BlackAndWhite, .5);
 
-			Bitmap bm2 = new Bitmap(ms2);
-			return bm2;
+			//MemoryStream ms2 = new MemoryStream();
+			//TiffBitmapEncoder encoder = new TiffBitmapEncoder
+			//{
+			//	Compression = TiffCompressOption.None
+			//};
+			//encoder.Frames.Add(BitmapFrame.Create(formatConvertedBitmap));
+			//encoder.Save(ms2);
+
+			//ms2.Flush();
+			//ms2.Seek(0, SeekOrigin.Begin);
+
+			//Bitmap bm2 = new Bitmap(ms2);
+			//return bm2;
 		}
 
 		public static string QRDecode(this Bitmap bm)

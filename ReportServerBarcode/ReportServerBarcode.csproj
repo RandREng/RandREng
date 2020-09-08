@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <Copyright>2000 - 2020 R &amp; R Engineering, LLC a Georgia Company</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Drawing.Common" Version="5.0.0-preview.4.20251.6" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.0-preview.8.20407.11" />
     <PackageReference Include="ZXing.Net" Version="0.16.5" />
   </ItemGroup>
 

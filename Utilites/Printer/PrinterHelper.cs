@@ -205,27 +205,27 @@ namespace RandREng.Utility.Printer
         static public List<SuEvent> GetPrintedFilesFromEventLog(ILogger Logger)
         {
             List<SuEvent> alEntry = new List<SuEvent>();
-            try
-            {
-                string source = "PrintService";
-                string logname = @"Microsoft-Windows-PrintService/Operational";
-                string machine = ".";
+            //try
+            //{
+            //    string source = "PrintService";
+            //    string logname = @"Microsoft-Windows-PrintService/Operational";
+            //    string machine = ".";
 
-                // Create an EventLog instance and assign its source.
-                using (EventLog myLog = new EventLog(logname, machine, source))
-                {
-                    alEntry = (from e in myLog.Entries.Cast<EventLogEntry>()
-                               where
-                                 (e.Message.ToLower().Contains(".pdf") ||
-                                 e.Message.ToLower().Contains(".tif")) &&
-                                 !e.Message.ToLower().Contains("deleted")
-                               select e).ToList().Select(w => new SuEvent(w.TimeGenerated, w.Message)).ToList();
-                }
-            }
-            catch (Exception e)
-            {
-                Logger.LogCritical(e);
-            }
+            //    // Create an EventLog instance and assign its source.
+            //    using (EventLog myLog = new EventLog(logname, machine, source))
+            //    {
+            //        alEntry = (from e in myLog.Entries.Cast<EventLogEntry>()
+            //                   where
+            //                     (e.Message.ToLower().Contains(".pdf") ||
+            //                     e.Message.ToLower().Contains(".tif")) &&
+            //                     !e.Message.ToLower().Contains("deleted")
+            //                   select e).ToList().Select(w => new SuEvent(w.TimeGenerated, w.Message)).ToList();
+            //    }
+            //}
+            //catch (Exception e)
+            //{
+            //    Logger.LogCritical(e);
+            //}
 
             return alEntry;
         }

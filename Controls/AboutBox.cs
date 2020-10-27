@@ -4,10 +4,12 @@ using System.Diagnostics;
 using Microsoft.Win32;
 using System.Reflection;
 using RandREng.Utility.Assembly;
+using System.Runtime.Versioning;
 
 namespace RandREng.Controls
 {
-    public partial class AboutBox : System.Windows.Forms.Form
+	[SupportedOSPlatform("windows")]
+	public partial class AboutBox : System.Windows.Forms.Form
 	{
 
 		public AboutBox()

@@ -4,10 +4,12 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
+using System.Runtime.Versioning;
 using System.Windows.Forms;
 
 namespace RandREng.Utility.Documents
 {
+    [SupportedOSPlatform("windows")]
     public class DragDropHelper
     {
         public List<string> AllowedExt { get; set; }

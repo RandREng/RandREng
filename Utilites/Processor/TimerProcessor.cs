@@ -4,6 +4,7 @@ using System.Collections;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using RandREng.Utility.Logger;
+using System.Threading.Tasks;
 
 namespace RandREng.Utility.Processor
 {
@@ -39,7 +40,7 @@ namespace RandREng.Utility.Processor
 
         protected void Start()
         {
-            Init();
+            InitAsync().Wait();
             if (Processing)
             {
                 Logger.Log(LogLevel.Information, "Processor starting.");
@@ -73,12 +74,12 @@ namespace RandREng.Utility.Processor
             }
         }
 
-        virtual protected void Init()
+        virtual protected async Task InitAsync()
         {
 //            WriteEventLog("Initializing Processor...");
         }
 
-        virtual protected void Consumer(object o)
+        virtual protected async Task Consumer(object o)
         {
         }
 
@@ -125,7 +126,7 @@ namespace RandREng.Utility.Processor
                     try
                     {
                         object o = PQueue.Consume();
-                        Consumer(o);
+                        Consumer(o).Wait();
                     }
                     catch (Exception e)
                     {
@@ -155,7 +156,7 @@ namespace RandREng.Utility.Processor
         protected class ProcessQueue
         {
             readonly object queueLock = new object();
-            Queue queue = new Queue();
+            readonly Queue queue = new Queue();
 
             public void Produce(object o)
             {

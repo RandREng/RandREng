@@ -5,9 +5,11 @@ using System.Management;
 using System.Diagnostics;
 using Microsoft.Extensions.Logging;
 using RandREng.Utility.Logger;
+using System.Runtime.Versioning;
 
 namespace RandREng.Utility.Printer
 {
+    [SupportedOSPlatform("windows")]
     public class PrinterHelper
     {
         public string RequestedPrinterName { get; set; }
@@ -16,7 +18,7 @@ namespace RandREng.Utility.Printer
         public string PrinterPort { get; set; }
         public string DeviceID { get; set; }
 
-        private ILogger Logger;
+        private readonly ILogger Logger;
 
         public PrinterHelper(ILogger logger)
         {
@@ -58,7 +60,7 @@ namespace RandREng.Utility.Printer
             // should only contain one entry
             foreach (ManagementObject mo in queryCollection)
             {
-                deviceID = mo["DeviceID"] as string;
+                deviceID = mo[nameof(DeviceID)] as string;
             }
             return deviceID;
         }

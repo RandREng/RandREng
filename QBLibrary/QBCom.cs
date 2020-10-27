@@ -101,7 +101,7 @@ namespace RandREng.QBLibrary
 			return r;
 		}
 
-		public QBXMLMsgsRs buildInvoiceAddRqXML(string customer, DateTime txnDate, string refNumber)
+		public QBXMLMsgsRs buildInvoiceAddRqXML(string customer, DateTime? txnDate, string refNumber)
 		{
             InvoiceAddRqType req = new InvoiceAddRqType
             {
@@ -121,7 +121,7 @@ namespace RandREng.QBLibrary
 
             if (txnDate != null)
 			{
-				req.InvoiceAdd.TxnDate = txnDate.ToString("yyyy-MM-dd");
+				req.InvoiceAdd.TxnDate = txnDate.Value.ToString("yyyy-MM-dd");
 			}
 			if (!string.IsNullOrEmpty(refNumber))
 			{

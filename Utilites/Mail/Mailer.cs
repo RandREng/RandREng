@@ -9,12 +9,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using RandREng.Utility.Logger;
 using RandREng.Utility.AppSettings;
+using System.Threading.Tasks;
 
 namespace RandREng.Utility.Mail
 {
     public class Mailer
     {
-        private ILogger Logger;
+        private readonly ILogger Logger;
 
         public enum EnEmailAddressStatusCode { Valid, Blank, IncorrectFormat };
 
@@ -27,7 +28,7 @@ namespace RandREng.Utility.Mail
         public string FromAddress { get; set; }
         public string FromFriendlyName { get; set; }
 
-        private List<string> toAddresses = null;
+        private List<string> toAddresses;
         public List<string> ToAddresses
         {
             get
@@ -45,7 +46,7 @@ namespace RandREng.Utility.Mail
             }
         }
 
-        private List<string> ccAddresses = null;
+        private List<string> ccAddresses;
         public List<string> CCAddresses
         {
             get
@@ -127,45 +128,46 @@ namespace RandREng.Utility.Mail
             Logger = logger;
         }
 
-        public bool SendMail(string Subject, string Body, ref string errors)
+        public async Task<(bool, string)> SendMailAsync(string Subject, string Body)
         {
-            return SendMail(Subject, Body, false, ref errors);
+            return await SendMailAsync(Subject, Body, false);
         }
 
-        public bool SendMail(string Subject, string Body, bool HighPriority, ref string errors)
+        public async Task<(bool, string)> SendMailAsync(string Subject, string Body, bool HighPriority)
         {
-            return SendMail(Subject, Body, HighPriority, "", ref errors);
+            return await SendMailAsync(Subject, Body, HighPriority, "");
         }
 
-        public bool SendMail(string Subject, string Body, bool HighPriority, string Attachment, ref string errors)
+        public async Task<(bool, string)> SendMailAsync(string Subject, string Body, bool HighPriority, string Attachment)
         {
-            return SendMail(Subject, Body, HighPriority, Attachment, ToAddresses, FromAddress, FromFriendlyName, ref errors);
+            return await SendMailAsync(Subject, Body, HighPriority, Attachment, ToAddresses, FromAddress, FromFriendlyName);
         }
 
-        public bool SendMail(string Subject, string Body, bool HighPriority, string Attachment, string To, string From, string DisplayName, ref string errors)
+        public async Task<(bool, string)> SendMailAsync(string Subject, string Body, bool HighPriority, string Attachment, string To, string From, string DisplayName)
         {
             if (string.IsNullOrWhiteSpace(To))
             {
-                Logger.Log(LogLevel.Error, string.Format("Cannot add an empty To address to email with subject: {0}", Subject));
-                return false;
+                string error = $"Cannot add an empty To address to email with subject: {Subject}"; 
+                Logger.Log(LogLevel.Error, error);
+                return (false, error);
             }
             ToAddresses.Clear();  // need to clear any existing addresses that may have been added
             Logger.Log(LogLevel.Debug, string.Format("Adding address: {0}", To));
             ToAddresses.Add(To);
-            return SendMail(Subject, Body, HighPriority, Attachment, ToAddresses, From, DisplayName, AuthAccount, AuthPasswrd, ref errors);
+            return await SendMailAsync(Subject, Body, HighPriority, Attachment, ToAddresses, From, DisplayName, AuthAccount, AuthPasswrd);
         }
 
-        public bool SendMail(string Subject, string Body, bool HighPriority, string Attachment, List<string> ToAddresses, string From, string DisplayName, ref string errors)
+        public async Task<(bool, string)> SendMailAsync(string Subject, string Body, bool HighPriority, string Attachment, List<string> ToAddresses, string From, string DisplayName)
         {
-            return SendMail(Subject, Body, HighPriority, Attachment, ToAddresses, From, DisplayName, AuthAccount, AuthPasswrd, ref errors);
+            return await SendMailAsync(Subject, Body, HighPriority, Attachment, ToAddresses, From, DisplayName, AuthAccount, AuthPasswrd);
         }
 
-        public bool SendMail(string Subject, string Body, bool HighPriority, string Attachment, string To, string CC, string From, string DisplayName, string Account, string Password, ref string errors)
+        public async Task<(bool, string)> SendMailAsync(string Subject, string Body, bool HighPriority, string Attachment, string To, string CC, string From, string DisplayName, string Account, string Password)
         {
             if (string.IsNullOrWhiteSpace(To))
             {
                 Logger.Log(LogLevel.Error, string.Format("Cannot add an empty To address to email with subject: {0}", Subject));
-                return false;
+                return (false, "Null to");
             }
             ToAddresses.Clear();  // need to clear any existing addresses that may have been added
             ToAddresses.Add(To);
@@ -173,11 +175,12 @@ namespace RandREng.Utility.Mail
             CCAddresses.Clear();
             CCAddresses.Add(CC);
 
-            return SendMail(Subject, Body, HighPriority, Attachment, ToAddresses, From, DisplayName, Account, Password, ref errors);
+            return await SendMailAsync(Subject, Body, HighPriority, Attachment, ToAddresses, From, DisplayName, Account, Password);
         }
 
-        public bool SendMail(string Subject, string Body, bool HighPriority, string Attachment, List<string> ToAddresses, string From, string DisplayName, string Account, string Password, ref string errors)
+        public async Task<(bool, string)> SendMailAsync(string Subject, string Body, bool HighPriority, string Attachment, List<string> ToAddresses, string From, string DisplayName, string Account, string Password)
         {
+            string errors = "";
             bool retVal = false;
             try
             {
@@ -193,9 +196,10 @@ namespace RandREng.Utility.Mail
                     }
                     catch (Exception e)
                     {
+                        errors = $"From - {From}";
                         Logger.LogCritical(e);
-                        Logger.LogError(string.Format("From - {0}", From));
-                        return false;
+                        Logger.LogError(errors);
+                        return (false, errors);
                     }
 
                     try
@@ -211,7 +215,7 @@ namespace RandREng.Utility.Mail
                         errors += e.Message;
                         Logger.LogCritical(e);
                         Logger.LogError(string.Format("ReplyTo - {0}", From));
-                        return false;
+                        return (false, errors);
                     }
                     message.Body = Body;
                     message.To.Clear();  // need to clear any existing addresses that may have been added
@@ -232,7 +236,7 @@ namespace RandREng.Utility.Mail
                                 errors += e.Message;
                                 Logger.LogCritical(e);
                                 Logger.LogError(string.Format("CC - {0}", ToAddress));
-                                return false;
+                                return (false, errors);
                             }
                         }
                         else
@@ -260,7 +264,7 @@ namespace RandREng.Utility.Mail
                                 errors += e.Message;
                                 Logger.LogCritical(e);
                                 Logger.LogError(string.Format("CC - {0}", CCAddress));
-                                return false;
+                                return (false, errors);
                             }
                         }
                         else
@@ -280,7 +284,7 @@ namespace RandREng.Utility.Mail
                     message.Priority = HighPriority ? MailPriority.High : MailPriority.Normal;
                     try
                     {
-                        Client.Send(message);
+                        await Client.SendMailAsync(message);
                         retVal = true;
                     }
                     catch (Exception ex)
@@ -309,32 +313,32 @@ namespace RandREng.Utility.Mail
             {
                 Logger.LogCritical(e);
             }
-            return retVal;
+            return (retVal,errors);
         }
 
-        public bool SendMail(MailMessage message, string Account, string Password, ref string Messages)
+        public async Task<(bool, string)> SendMailAsync(MailMessage message, string Account, string Password)
         {
+            string error = "";
             bool retVal = false;
             try
             {
                 Client.Credentials = new NetworkCredential(Account, Password);
 
-                Client.Send(message);
+                await Client.SendMailAsync(message);
                 retVal = true;
             }
             catch (Exception e)
             {
                 Logger.LogError(message.ToString());
-                Messages += e.Message;
+                error += e.Message;
                 Logger.LogCritical(e);
             }
-            return retVal;
+            return (retVal, error);
         }
 
         public static bool IsValidEmail(string emailAddress)
         {
-            EnEmailAddressStatusCode code = EnEmailAddressStatusCode.Blank;
-            return IsValidEmail(emailAddress, out code);
+            return IsValidEmail(emailAddress, out _);
         }
 
         public static bool IsValidEmail(string emailAddress, out EnEmailAddressStatusCode statusCode)

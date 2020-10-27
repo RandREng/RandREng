@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace RandREng.Controls
@@ -8,7 +9,7 @@ namespace RandREng.Controls
     public interface IErrorHelper
     {
         string User { get; }
-        void SendMail(string body);
+        Task SendMailAsync(string body);
     }
 
     public partial class ErrorForm : Form
@@ -189,7 +190,7 @@ namespace RandREng.Controls
         private void buttonEmail_Click(object sender, EventArgs e)
         {
             this.buttonEmail.Enabled = false;
-            ErrorHelper.SendMail(GetData());
+            ErrorHelper.SendMailAsync(GetData());
             this.buttonEmail.Enabled = true;
         }
 

@@ -111,11 +111,7 @@ namespace RandREng.Utility.Mail
             BodyIsHtml = false;
         }
 
-        public Mailer(string server) : this(server, 25, false)
-        {
-        }
-
-        public Mailer(string server, int port, bool useSSL) : this(server, port, useSSL, NullLogger.Instance)
+        public Mailer(string server, int port = 25, bool useSSL = false) : this(server, port, useSSL, NullLogger.Instance)
         {
         }
 

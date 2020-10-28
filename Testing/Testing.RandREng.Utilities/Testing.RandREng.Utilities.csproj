@@ -24,4 +24,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Utilites\RandREng.Utility.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Configuration;
+using RandREng.Utility.Mail;
 using Xunit;
 
 namespace Testing.RandREng.Utilities
@@ -20,6 +21,7 @@ namespace Testing.RandREng.Utilities
         }
 
         private IConfiguration configuration { get; set; }
+        private Settings settings { get; set; }
 
         public MailerTests()
         {
@@ -28,15 +30,28 @@ namespace Testing.RandREng.Utilities
                 .AddUserSecrets<Settings>()
                 .Build();
 
-            var temp = configuration.GetSection("MailSettings").Get<Settings>();
+            settings = configuration.GetSection("MailSettings").Get<Settings>();
 
         }
 
         [Fact]
-        public void Test1()
+        public void MailerDefaults()
         {
-            string temp = configuration["SmtpServer"];
-            string t2 = configuration["SmtpPort"];
+            Mailer mailer = new Mailer(settings.SmtpServer);
+
+            Assert.Equal(25, mailer.Port);
+            Assert.Equal(settings.SmtpServer, mailer.SMTPServer);
+            Assert.False(mailer.UseSSL);
+        }
+
+        [Fact]
+        public void MailerOverrides()
+        {
+            Mailer mailer = new Mailer(settings.SmtpServer, 100, true);
+
+            Assert.Equal(100, mailer.Port);
+            Assert.Equal(settings.SmtpServer, mailer.SMTPServer);
+            Assert.True(mailer.UseSSL);
         }
     }
 }

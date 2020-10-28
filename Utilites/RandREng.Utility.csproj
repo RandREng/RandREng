@@ -4,6 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <Copyright>2000 - 2020 R &amp; R Engineering, LLC a Georgia Company</Copyright>
     <Description>Utility Functionality</Description>
+    
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,10 +17,6 @@
     <PackageReference Include="System.Security.Principal.Windows" Version="5.0.0-rc.2.20475.5" />
     <PackageReference Include="ZXing.Net" Version="0.16.6" />
     <PackageReference Include="ZXing.Net.Bindings.ImageSharp" Version="0.16.9-beta" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Security\" />
   </ItemGroup>
 
 </Project>

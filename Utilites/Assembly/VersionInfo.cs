@@ -37,9 +37,7 @@ namespace RandREng.Utility.Assembly
             object[] obj = asm.GetCustomAttributes(false);
             foreach (object o in obj)
             {
-                AssemblyCopyrightAttribute aca = o as AssemblyCopyrightAttribute;
-
-                if (aca != null)
+                if (o is AssemblyCopyrightAttribute aca)
                 {
                     return aca.Copyright;
                 }
@@ -57,7 +55,7 @@ namespace RandREng.Utility.Assembly
             System.Reflection.Assembly[] myAssemblies = Thread.GetDomain().GetAssemblies();
             foreach (System.Reflection.Assembly assem in myAssemblies)
             {
-                if (assem.GetName().Name.IndexOf("System.") == -1)
+                if (!assem.GetName().Name.Contains("System.", StringComparison.CurrentCulture))
                 {
                     AssemblyName[] ref_assem2 = assem.GetReferencedAssemblies();
                     if (ref_assem2.Length > 0)

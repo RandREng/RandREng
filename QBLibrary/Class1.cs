@@ -37,9 +37,9 @@ namespace RandREng.QBLibrary
 		{
 			Dispose(false);
 		}
-		private bool _disposed = false;
+		private bool _disposed;
 
-		public void Dispose()
+        public void Dispose()
 		{
 			Dispose(true);
 
@@ -248,9 +248,9 @@ namespace RandREng.QBLibrary
 			Dispose(false);
 		}
 
-		private bool _disposed = false;
+		private bool _disposed;
 
-		public void Dispose()
+        public void Dispose()
 		{
 			Dispose(true);
 

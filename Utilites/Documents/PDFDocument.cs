@@ -135,9 +135,9 @@ namespace RandREng.Utility.Documents
 			pdfDoc.Close();
 		}
 		
-		private PdfDocument pdfDoc = null;
+		private PdfDocument pdfDoc;
 
-		public void Open(string fileName)
+        public void Open(string fileName)
 		{
 			pdfDoc = new PdfDocument(new PdfReader(fileName));
 			//reader = new PdfReader(fileName);
@@ -182,9 +182,9 @@ namespace RandREng.Utility.Documents
 			}
 		}
 
-		Document document = null;
+		Document document;
 
-		public void Add(Bitmap bm, RotateFlipType rotate)
+        public void Add(Bitmap bm, RotateFlipType rotate)
 		{
 			if (mode == Mode.NotOpen)
 			{

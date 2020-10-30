@@ -155,7 +155,7 @@ namespace RandREng.Utility.CVS
                     string delimeter = Delimiter.ToString(); ;
                     if (temp[0] == Quote)
                     {
-                        temp = temp.Substring(1);
+                        temp = temp[1..];
                         delimeter = Quote.ToString() + Delimiter.ToString();
                     }
 
@@ -163,8 +163,8 @@ namespace RandREng.Utility.CVS
                     string item = temp;
                     if (index > -1)
                     {
-                        item = temp.Substring(0, index);
-                        temp = temp.Substring(index + delimeter.Length);
+                        item = temp[0..index];
+                        temp = temp[(index + delimeter.Length)..];
                     }
                     else
                     {

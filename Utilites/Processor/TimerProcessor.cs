@@ -15,8 +15,8 @@ namespace RandREng.Utility.Processor
         protected ProcessQueue PQueue { get; set; }
         virtual protected ILogger Logger { get; set; }
         private System.Timers.Timer m_BaseTimer;
-        protected int Stagger = 0;
-        protected bool SyncOnHour = false;
+        protected int Stagger;
+        protected bool SyncOnHour;
         protected int Interval = 60000;
 
         protected string InstanceName { get; private set; }

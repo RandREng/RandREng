@@ -14,7 +14,7 @@ namespace RandREng.Controls
 
     public partial class ErrorForm : Form
     {
-        private bool bAdvanced = false;
+        private bool bAdvanced;
         private Size oldClientSize;
         private int OldButtonsY;
         private int OldTextBoxY;

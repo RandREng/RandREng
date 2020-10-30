@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace RandREng.Utility
@@ -24,8 +25,8 @@ namespace RandREng.Utility
         /// <returns></returns>
         public static string SafeTrimMax(this string theString, int MaxLength)
         {
-            theString.SafeTrim();
-            return theString.Substring(0, Math.Min(MaxLength, theString.Length));
+            string temp = theString.SafeTrim();
+            return temp.Substring(0, Math.Min(MaxLength, temp.Length));
         }
 
         /// <summary>
@@ -55,13 +56,14 @@ namespace RandREng.Utility
         /// <returns></returns>
         public static string RemoveExtraSpaces(this string theString)
         {
-            char[] delimiter = { ' ' };
+            char[] delimiter = { ' ', '\t', '\r', '\n' };
 
-            string[] split = theString.Split(delimiter, 100);
+            string[] split = theString.Split(delimiter, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
-            string newString = split.Where(s => s.Length > 0).Aggregate("", (current, s) => current + s.Trim() + " ");
+//            string newString = split.Where(s => s.Length > 0).Aggregate("", (current, s) => current + s.Trim() + " ");
+            return string.Join(' ', split);
 
-            return newString.Trim();
+//            return newString.Trim();
 
         }
 
@@ -73,12 +75,12 @@ namespace RandREng.Utility
         /// <returns></returns>
         public static bool DoesNotContain(this string theString, string searchString)
         {
-            return false == theString.Contains(searchString);
+            return string.IsNullOrEmpty(theString) || false ==  theString.Contains(searchString);
         }
 
         public static bool ContainsNumbers(this string theString)
         {
-            return Regex.IsMatch(theString, @"\d");
+            return !string.IsNullOrEmpty(theString) && Regex.IsMatch(theString, @"\d");
         }
 
     }

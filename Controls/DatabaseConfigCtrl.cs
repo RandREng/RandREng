@@ -8,7 +8,7 @@ namespace RandREng.Controls
 {
     public partial class DatabaseConfigCtrl : UserControl
     {
-        protected bool _useappconfig = false;
+        protected bool _useappconfig;
 
         public bool UseAppConfig
         {

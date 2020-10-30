@@ -65,7 +65,7 @@ namespace RandREng.Utility.Mail
         }
 
         public bool BodyIsHtml { get; set; }
-        private SmtpClient client = null;
+        private SmtpClient client;
         private SmtpClient Client
         {
             get
@@ -302,7 +302,8 @@ namespace RandREng.Utility.Mail
                 }
                 else
                 {
-                    Logger.Log(LogLevel.Information, "SendMail() - ToAddress, FromAddress, or SMTPServer name was empty.");
+                    errors = "SendMail() - ToAddress, FromAddress, or SMTPServer name was empty.";
+                    Logger.Log(LogLevel.Error, errors);
                 }
             }
             catch (Exception e)

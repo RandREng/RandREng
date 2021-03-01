@@ -45,6 +45,7 @@ namespace Testing.RandREng.Utilities
         }
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void MailerDefaults()
         {
             Mailer mailer = new Mailer(settings.SmtpServer);
@@ -55,6 +56,7 @@ namespace Testing.RandREng.Utilities
         }
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void MailerOverrides()
         {
             Mailer mailer = new Mailer(settings.SmtpServer, 100, true);
@@ -65,6 +67,7 @@ namespace Testing.RandREng.Utilities
         }
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void MailerOverrides2()
         {
             Mailer mailer = new Mailer(settings.SmtpServer, useSSL: settings.SmtpUseSsl);
@@ -75,6 +78,7 @@ namespace Testing.RandREng.Utilities
         }
 
         [Fact]
+        [Trait("Category", "Integration")]
         public async Task SendMail1()
         {
             Mailer mailer = new Mailer(settings.SmtpServer, settings.SmtpPort, useSSL: settings.SmtpUseSsl);
@@ -102,6 +106,7 @@ namespace Testing.RandREng.Utilities
 
         }
         [Fact]
+        [Trait("Category", "Integration")]
         public async Task SendMail2()
         {
             string subject = $"Test{Guid.NewGuid()}";
@@ -134,7 +139,7 @@ namespace Testing.RandREng.Utilities
 
         }
 
-        private async Task<MimeMessage> GetMail(string subject, int maxDelay = 10)
+        private async Task<MimeMessage> GetMail(string subject, int maxDelay = 20)
         {
             MimeMessage message = null;
             using (var client = new ImapClient())

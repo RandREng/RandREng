@@ -25,10 +25,10 @@ namespace RandREng.Utility.Documents
 {
 	public class PDFDocument : IDocument
 	{
-		const float PAGE_LEFT_MARGIN = 0;
-		const float PAGE_RIGHT_MARGIN = 0;
-		const float PAGE_TOP_MARGIN = 0;
-		const float PAGE_BOTTOM_MARGIN = 0;
+        private const float PAGE_LEFT_MARGIN = 0;
+        private const float PAGE_RIGHT_MARGIN = 0;
+        private const float PAGE_TOP_MARGIN = 0;
+        private const float PAGE_BOTTOM_MARGIN = 0;
 
 		private enum Mode
 		{
@@ -123,7 +123,7 @@ namespace RandREng.Utility.Documents
 
 		public static void AddImage(Stream inputPdfStream, Stream outputPdfStream, byte[] inputBytes)
 		{
-			PdfDocument pdfDoc = new PdfDocument(new PdfReader(inputPdfStream), new PdfWriter(outputPdfStream));
+			PdfDocument pdfDoc = new(new PdfReader(inputPdfStream), new PdfWriter(outputPdfStream));
 			ImageData img = ImageDataFactory.Create(inputBytes);
 			PdfPage page = pdfDoc.GetFirstPage();
 			iText.Kernel.Geom.Rectangle rect = page.GetPageSize();
@@ -150,9 +150,9 @@ namespace RandREng.Utility.Documents
 
 		public Bitmap GetImage(int index)
 		{
-			MemoryStream stream = new MemoryStream();
+			MemoryStream stream = new();
 			IEventListener listener = new MyImageRenderListener(stream);
-			PdfCanvasProcessor parser = new PdfCanvasProcessor(listener);
+			PdfCanvasProcessor parser = new(listener);
 			//            for (int i = 1; i <= pdfDoc.GetNumberOfPages(); i++)
 			//            {
 			parser.ProcessPageContent(pdfDoc.GetPage(index));
@@ -182,7 +182,7 @@ namespace RandREng.Utility.Documents
 			}
 		}
 
-		Document document;
+        private Document document;
 
         public void Add(Bitmap bm, RotateFlipType rotate)
 		{
@@ -193,7 +193,7 @@ namespace RandREng.Utility.Documents
 				//writer = PdfWriter.GetInstance(pdfDocument, stream);
 				//pdfDocument.Open();
 
-				PdfWriter writer = new PdfWriter(FileName);
+				PdfWriter writer = new(FileName);
 				pdfDoc = new PdfDocument(writer);
 				document = new Document(pdfDoc, PageSize.LETTER);
 				document.SetMargins(PAGE_TOP_MARGIN, PAGE_RIGHT_MARGIN, PAGE_BOTTOM_MARGIN, PAGE_LEFT_MARGIN);
@@ -207,7 +207,7 @@ namespace RandREng.Utility.Documents
 				image.RotateFlip(rotate);
 			}
 
-			MemoryStream ms = new MemoryStream();
+			MemoryStream ms = new();
 			image.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
 
 			iText.Layout.Element.Image img = new iText.Layout.Element.Image(ImageDataFactory

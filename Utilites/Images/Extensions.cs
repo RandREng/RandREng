@@ -22,17 +22,17 @@ namespace RandREng.Utility.Images
             int newWidth = (int)(image.Width * ratioX);
             int newHeight = (int)(image.Height * ratioY);
 
-            Bitmap newImage = new Bitmap(newWidth, newHeight);
+            Bitmap newImage = new(newWidth, newHeight);
 			newImage.SetResolution(dpi, dpi);
 			Graphics g = Graphics.FromImage(newImage);
 			g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;
 			g.DrawImage(image, 0, 0, newWidth, newHeight);
 
-			MemoryStream ms = new MemoryStream();
+			MemoryStream ms = new();
 			newImage.Save(ms, ImageFormat.Tiff);
 			ms.Flush();
 			ms.Seek(0, SeekOrigin.Begin);
-			Bitmap bm = new Bitmap(ms);
+			Bitmap bm = new(ms);
 			return bm;
 
 

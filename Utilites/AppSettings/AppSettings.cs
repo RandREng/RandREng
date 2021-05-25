@@ -45,7 +45,7 @@ namespace RandREng.Utility.AppSettings
             int Index = 1;
             string temp = "";
 
-            List<string> Values = new List<string>();
+            List<string> Values = new();
 
             for (; temp != null;)
             {
@@ -67,7 +67,7 @@ namespace RandREng.Utility.AppSettings
 
         public static List<string> GetAppSettingsLike(string Name)
         {
-            List<string> Values = new List<string>();
+            List<string> Values = new();
 
             NameValueCollection appSettings = ConfigurationManager.AppSettings;
 

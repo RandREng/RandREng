@@ -17,7 +17,7 @@ namespace RandREng.Utility.Documents
         public void HandleDragEnter(DragEventArgs e)
         {
             //wrap standard IDataObject in OutlookDataObject
-            OleDataObject dataObject = new OleDataObject(e.Data);
+            OleDataObject dataObject = new(e.Data);
             string[] filenames = null;
             if (dataObject.GetDataPresent("FileDrop"))
             {
@@ -44,8 +44,8 @@ namespace RandREng.Utility.Documents
 
         public List<string> HandleDrop(DragEventArgs e)
         {
-            List<string> output = new List<string>();
-            OleDataObject dataObject = new OleDataObject(e.Data);
+            List<string> output = new();
+            OleDataObject dataObject = new(e.Data);
 
             if (!Directory.Exists(OutputDir))
             {
@@ -105,7 +105,7 @@ namespace RandREng.Utility.Documents
             private class NativeMethods
             {
                 [DllImport("kernel32.dll")]
-                static extern IntPtr GlobalLock(IntPtr hMem);
+                private static extern IntPtr GlobalLock(IntPtr hMem);
 
                 [DllImport("ole32.dll", PreserveSig = false)]
                 public static extern ILockBytes CreateILockBytesOnHGlobal(IntPtr hGlobal, bool fDeleteOnRelease);
@@ -222,22 +222,22 @@ namespace RandREng.Utility.Documents
             /// <summary>
             /// Holds the <see cref="System.Windows.Forms.IDataObject"/> that this class is wrapping
             /// </summary>
-            private System.Windows.Forms.IDataObject underlyingDataObject;
+            private readonly System.Windows.Forms.IDataObject underlyingDataObject;
 
             /// <summary>
             /// Holds the <see cref="System.Runtime.InteropServices.ComTypes.IDataObject"/> interface to the <see cref="System.Windows.Forms.IDataObject"/> that this class is wrapping.
             /// </summary>
-            private System.Runtime.InteropServices.ComTypes.IDataObject comUnderlyingDataObject;
+            private readonly System.Runtime.InteropServices.ComTypes.IDataObject comUnderlyingDataObject;
 
             /// <summary>
             /// Holds the internal ole <see cref="System.Windows.Forms.IDataObject"/> to the <see cref="System.Windows.Forms.IDataObject"/> that this class is wrapping.
             /// </summary>
-            private System.Windows.Forms.IDataObject oleUnderlyingDataObject;
+            private readonly System.Windows.Forms.IDataObject oleUnderlyingDataObject;
 
             /// <summary>
             /// Holds the <see cref="MethodInfo"/> of the "GetDataFromHGLOBLAL" method of the internal ole <see cref="System.Windows.Forms.IDataObject"/>.
             /// </summary>
-            private MethodInfo getDataFromHGLOBLALMethod;
+            private readonly MethodInfo getDataFromHGLOBLALMethod;
 
             #endregion
 
@@ -429,7 +429,7 @@ namespace RandREng.Utility.Documents
             public MemoryStream GetData(string format, int index)
             {
                 //create a FORMATETC struct to request the data with
-                FORMATETC formatetc = new FORMATETC
+                FORMATETC formatetc = new()
                 {
                     cfFormat = (short)DataFormats.GetFormat(format).Id,
                     dwAspect = DVASPECT.DVASPECT_CONTENT,
@@ -439,7 +439,7 @@ namespace RandREng.Utility.Documents
                 };
 
                 //create STGMEDIUM to output request results into
-                STGMEDIUM medium = new STGMEDIUM();
+                STGMEDIUM medium = new();
 
                 //using the Com IDataObject interface get the data using the defined FORMATETC
                 comUnderlyingDataObject.GetData(ref formatetc, out medium);

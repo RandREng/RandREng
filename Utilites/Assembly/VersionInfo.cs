@@ -18,7 +18,7 @@ namespace RandREng.Utility.Assembly
             string[] versionInfo = VersionNumber.Split('.');
             if (versionInfo.Length == 4)
             {
-                DateTime buildDT = new DateTime(1980, 1, 1);
+                DateTime buildDT = new(1980, 1, 1);
                 double days = Convert.ToDouble(versionInfo[2]);
                 //                System.Double seconds = Convert.ToDouble(versionInfo[3]) * 2;
                 //                buildDT = buildDT.AddSeconds(seconds);

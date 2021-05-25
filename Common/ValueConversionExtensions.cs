@@ -10,14 +10,12 @@ namespace RandREng.Common
 	{
 		public static PropertyBuilder<T> HasJsonConversion<T>(this PropertyBuilder<T> propertyBuilder) where T : class, new()
 		{
-			ValueConverter<T, string> converter = new ValueConverter<T, string>
-			(
+			ValueConverter<T, string> converter = new			(
 				v => JsonConvert.SerializeObject(v),
 				v => JsonConvert.DeserializeObject<T>(v) ?? new T()
 			);
 
-			ValueComparer<T> comparer = new ValueComparer<T>
-			(
+			ValueComparer<T> comparer = new			(
 				(l, r) => JsonConvert.SerializeObject(l) == JsonConvert.SerializeObject(r),
 				v => v == null ? 0 : JsonConvert.SerializeObject(v).GetHashCode(),
 				v => JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(v))

@@ -14,7 +14,7 @@ namespace RandREng.ReportServer
     {
         public async static Task<byte[]> Render(string serverName, string reportPath, ParameterValue[] parameters, string userName, string passWord, string format = "PDF")
         {
-            BasicHttpsBinding rsBinding = new BasicHttpsBinding(BasicHttpsSecurityMode.Transport)
+            BasicHttpsBinding rsBinding = new(BasicHttpsSecurityMode.Transport)
             {
                 Security =
                     {
@@ -26,10 +26,10 @@ namespace RandREng.ReportServer
                 AllowCookies = true
             };
 
-            EndpointAddress rsEndpointAddress = new EndpointAddress($"https://{serverName}/ReportServer/ReportExecution2005.asmx");
+            EndpointAddress rsEndpointAddress = new($"https://{serverName}/ReportServer/ReportExecution2005.asmx");
             
 
-            ReportExecutionServiceSoapClient rsExec = new ReportExecutionServiceSoapClient(rsBinding, rsEndpointAddress);
+            ReportExecutionServiceSoapClient rsExec = new(rsBinding, rsEndpointAddress);
             rsExec.ClientCredentials.UserName.UserName = userName;
             rsExec.ClientCredentials.UserName.Password = passWord;
 
@@ -47,7 +47,7 @@ namespace RandREng.ReportServer
 
 
             string deviceInfo = "<DeviceInfo><Toolbar>False</Toolbar></DeviceInfo>";
-            RenderRequest renderReq = new RenderRequest(loadReport.ExecutionHeader, trustedUserHeader, format, deviceInfo);
+            RenderRequest renderReq = new(loadReport.ExecutionHeader, trustedUserHeader, format, deviceInfo);
             // Now, similar to the above task, we will call the RenderAsync() method and await its result
             RenderResponse taskRender = await rsExec.RenderAsync(renderReq);
 

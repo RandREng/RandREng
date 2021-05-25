@@ -8,8 +8,8 @@ namespace RandREng.Utility.Documents
 {
 	public class MTiffDocument : IDocument
 	{
-//		TiffBitmapEncoder encoder;
-		Stream imageStreamSource;
+        //		TiffBitmapEncoder encoder;
+        private Stream imageStreamSource;
 //		TiffBitmapDecoder decoder;
 
 		/// <summary>
@@ -33,7 +33,7 @@ namespace RandREng.Utility.Documents
 		public void Open(string fileName)
 		{
 			imageStreamSource = new MemoryStream();
-			Bitmap b = new Bitmap(fileName);
+			Bitmap b = new(fileName);
 			b.Save(imageStreamSource, ImageFormat.Tiff);
 			b.Dispose();
 			imageStreamSource.Seek(0, SeekOrigin.Begin);

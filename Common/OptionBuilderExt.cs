@@ -42,12 +42,7 @@ namespace RandREng.Common
 			return optionsBuilder;
 		}
 
-		private static void _ConfigureSqlServer(DbContextOptionsBuilder optionsBuilder, string connection)
-		{
-			optionsBuilder._ConfigureCommon();
-		}
-
-		private static void _ConfigureCommon(this DbContextOptionsBuilder optionsBuilder)
+        private static void _ConfigureCommon(this DbContextOptionsBuilder optionsBuilder)
 		{
 			// Changing default behavior when client evaluation occurs to throw. 
 			// Default in EF Core would be to log a warning when client evaluation is performed.

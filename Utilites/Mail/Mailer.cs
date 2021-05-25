@@ -183,7 +183,7 @@ namespace RandREng.Utility.Mail
                 if (ToAddresses.Count > 0 && !string.IsNullOrWhiteSpace(From) && !string.IsNullOrWhiteSpace(SMTPServer) &&
                     !string.IsNullOrWhiteSpace(Account) && !string.IsNullOrWhiteSpace(Password))
                 {
-                    MailMessage message = new MailMessage();
+                    MailMessage message = new();
                     Client.Credentials = new NetworkCredential(Account, Password);
 
                     try
@@ -375,7 +375,7 @@ namespace RandREng.Utility.Mail
         {
 
             // IdnMapping class with default property values.
-            IdnMapping idn = new IdnMapping();
+            IdnMapping idn = new();
 
             string domainName = match.Groups[2].Value;
 

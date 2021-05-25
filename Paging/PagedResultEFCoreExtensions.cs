@@ -11,7 +11,7 @@ namespace RandREng.Paging
 
         public static PagedResult<T> GetPaged<T>(this IQueryable<T> query, int page, int pageSize) where T : class
         {
-            PagedResult<T> result = new PagedResult<T>
+            PagedResult<T> result = new()
             {
                 CurrentPage = page,
                 PageSize = pageSize,
@@ -29,7 +29,7 @@ namespace RandREng.Paging
 
         public static PagedResult<U> GetPaged<T, U>(this IQueryable<T> query, int page, int pageSize) where U : class
         {
-            PagedResult<U> result = new PagedResult<U>
+            PagedResult<U> result = new()
             {
                 CurrentPage = page,
                 PageSize = pageSize,

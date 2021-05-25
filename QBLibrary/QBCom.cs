@@ -9,11 +9,11 @@ namespace RandREng.QBLibrary
 {
     public class QBCom : IDisposable
 	{
-		private RandREng.QBLibrary.IQBProcessor process ;
-		private ILogger Logger { get; set; }
-//		RandREng.QBLibrary.Class1 qb ;
-		XmlSerializerNamespaces ns;
-		XmlSerializer ser;
+		private readonly RandREng.QBLibrary.IQBProcessor process ;
+
+        //		RandREng.QBLibrary.Class1 qb ;
+        private readonly XmlSerializerNamespaces ns;
+        private readonly XmlSerializer ser;
 
 		public QBCom(string appID, string appName, string companyFile, ILogger logger)
 		{
@@ -36,7 +36,7 @@ namespace RandREng.QBLibrary
 
 		public QBXMLMsgsRs Transmit<T>(object txx, out T resp)
 		{
-            QBXML req = new QBXML
+            QBXML req = new()
             {
                 ItemsElementName = new ItemsChoiceType103[] { ItemsChoiceType103.QBXMLMsgsRq },
                 Items = new object[] { new QBXMLMsgsRq() }
@@ -45,19 +45,19 @@ namespace RandREng.QBLibrary
 			r.onError = QBXMLMsgsRqOnError.stopOnError;
 			r.Items = new object[] { txx };
 
-			MemoryStream ms = new MemoryStream();
-			XmlTextWriter w = new XmlTextWriter(ms, null);
+			MemoryStream ms = new();
+			XmlTextWriter w = new(ms, null);
 			w.WriteProcessingInstruction("xml", "version=\"1.0\"");
 			w.WriteProcessingInstruction("qbxml", "version=\"11.0\"");
 			ser.Serialize(w, req, ns);
 			ms.Seek(0, SeekOrigin.Begin);
 
-			StreamReader sr = new StreamReader(ms);
+			StreamReader sr = new(ms);
 			string t = sr.ReadToEnd();
 			t = this.process.Transmit(t);
 
 			QBXML ret = null;
-			StringReader tr = new StringReader(t);
+			StringReader tr = new(t);
 			ret = (QBXML)ser.Deserialize(tr);
 			QBXMLMsgsRs rs = (ret.Items[0] as QBXMLMsgsRs);
 			resp = (T) rs.Items[0];
@@ -67,7 +67,7 @@ namespace RandREng.QBLibrary
 
 		public QBXMLMsgsRs InvoiceQuery(string ItemRefNumber, string refNumber)
 		{
-			InvoiceQueryRqType req = new InvoiceQueryRqType();
+			InvoiceQueryRqType req = new();
 			if (!string.IsNullOrEmpty(ItemRefNumber))
 			{
 				req.TxnID = ItemRefNumber;
@@ -77,16 +77,15 @@ namespace RandREng.QBLibrary
 				req.RefNumber = refNumber;
 			}
 			req.IncludeLineItems = "true";
-			InvoiceQueryRsType resp;
-			QBXMLMsgsRs r = this.Transmit(req, out resp);
+            QBXMLMsgsRs r = this.Transmit(req, out InvoiceQueryRsType resp);
 
-			return r;
+            return r;
 
 		}
 
 		public QBXMLMsgsRs InvoiceMod(string ItemRefNumber, string refNumber)
 		{
-			InvoiceModRqType req = new InvoiceModRqType();
+			InvoiceModRqType req = new();
 			if (!string.IsNullOrEmpty(ItemRefNumber))
 			{
 				req.InvoiceMod.TxnID = ItemRefNumber;
@@ -95,15 +94,14 @@ namespace RandREng.QBLibrary
 			{
 				req.InvoiceMod.RefNumber = refNumber;
 			}
-			InvoiceQueryRsType resp;
-			QBXMLMsgsRs r = this.Transmit(req, out resp);
+            QBXMLMsgsRs r = this.Transmit(req, out InvoiceQueryRsType resp);
 
-			return r;
+            return r;
 		}
 
 		public QBXMLMsgsRs buildInvoiceAddRqXML(string customer, DateTime? txnDate, string refNumber)
 		{
-            InvoiceAddRqType req = new InvoiceAddRqType
+            InvoiceAddRqType req = new()
             {
                 InvoiceAdd = new InvoiceAdd
                 {
@@ -214,9 +212,9 @@ namespace RandREng.QBLibrary
 */
 			//Line Items
 
-			List<InvoiceLineAdd> lineItems = new List<InvoiceLineAdd>();
+			List<InvoiceLineAdd> lineItems = new();
 
-            InvoiceLineAdd line = new InvoiceLineAdd
+            InvoiceLineAdd line = new()
             {
                 //			ItemRef 
                 ItemRef = new ItemRef
@@ -251,54 +249,53 @@ namespace RandREng.QBLibrary
 
 
 
-			//XmlElement Element_InvoiceLineAdd;
-			//for (int x = 1; x < 6; x++)
-			//{
-			//	Element_InvoiceLineAdd = xmlDoc.CreateElement("InvoiceLineAdd");
-			//	InvoiceAdd.AppendChild(Element_InvoiceLineAdd);
+            //XmlElement Element_InvoiceLineAdd;
+            //for (int x = 1; x < 6; x++)
+            //{
+            //	Element_InvoiceLineAdd = xmlDoc.CreateElement("InvoiceLineAdd");
+            //	InvoiceAdd.AppendChild(Element_InvoiceLineAdd);
 
-			//	string[] lineItem = getLineItem(x);
-			//	if (lineItem[0] != "")
-			//	{
-			//		XmlElement Element_InvoiceLineAdd_ItemRef = xmlDoc.CreateElement("ItemRef");
-			//		Element_InvoiceLineAdd.AppendChild(Element_InvoiceLineAdd_ItemRef);
-			//		XmlElement Element_InvoiceLineAdd_ItemRef_FullName = xmlDoc.CreateElement("FullName");
-			//		Element_InvoiceLineAdd_ItemRef.AppendChild(Element_InvoiceLineAdd_ItemRef_FullName).InnerText = lineItem[0];
-			//	}
-			//	if (lineItem[1] != "")
-			//	{
-			//		XmlElement Element_InvoiceLineAdd_Desc = xmlDoc.CreateElement("Desc");
-			//		Element_InvoiceLineAdd.AppendChild(Element_InvoiceLineAdd_Desc).InnerText = lineItem[1];
-			//	}
-			//	if (lineItem[2] != "")
-			//	{
-			//		XmlElement Element_InvoiceLineAdd_Quantity = xmlDoc.CreateElement("Quantity");
-			//		Element_InvoiceLineAdd.AppendChild(Element_InvoiceLineAdd_Quantity).InnerText = lineItem[2];
-			//	}
-			//	if (lineItem[3] != "")
-			//	{
-			//		XmlElement Element_InvoiceLineAdd_Rate = xmlDoc.CreateElement("Rate");
-			//		Element_InvoiceLineAdd.AppendChild(Element_InvoiceLineAdd_Rate).InnerText = lineItem[3];
-			//	}
-			//	if (lineItem[4] != "")
-			//	{
-			//		XmlElement Element_InvoiceLineAdd_Amount = xmlDoc.CreateElement("Amount");
-			//		Element_InvoiceLineAdd.AppendChild(Element_InvoiceLineAdd_Amount).InnerText = lineItem[4];
-			//	}
-			//}
-
-
-			//InvoiceAddRq.SetAttribute("requestID", "99");
-			//requestXML = xmlDoc.OuterXml;
-
-			//return requestXML;
+            //	string[] lineItem = getLineItem(x);
+            //	if (lineItem[0] != "")
+            //	{
+            //		XmlElement Element_InvoiceLineAdd_ItemRef = xmlDoc.CreateElement("ItemRef");
+            //		Element_InvoiceLineAdd.AppendChild(Element_InvoiceLineAdd_ItemRef);
+            //		XmlElement Element_InvoiceLineAdd_ItemRef_FullName = xmlDoc.CreateElement("FullName");
+            //		Element_InvoiceLineAdd_ItemRef.AppendChild(Element_InvoiceLineAdd_ItemRef_FullName).InnerText = lineItem[0];
+            //	}
+            //	if (lineItem[1] != "")
+            //	{
+            //		XmlElement Element_InvoiceLineAdd_Desc = xmlDoc.CreateElement("Desc");
+            //		Element_InvoiceLineAdd.AppendChild(Element_InvoiceLineAdd_Desc).InnerText = lineItem[1];
+            //	}
+            //	if (lineItem[2] != "")
+            //	{
+            //		XmlElement Element_InvoiceLineAdd_Quantity = xmlDoc.CreateElement("Quantity");
+            //		Element_InvoiceLineAdd.AppendChild(Element_InvoiceLineAdd_Quantity).InnerText = lineItem[2];
+            //	}
+            //	if (lineItem[3] != "")
+            //	{
+            //		XmlElement Element_InvoiceLineAdd_Rate = xmlDoc.CreateElement("Rate");
+            //		Element_InvoiceLineAdd.AppendChild(Element_InvoiceLineAdd_Rate).InnerText = lineItem[3];
+            //	}
+            //	if (lineItem[4] != "")
+            //	{
+            //		XmlElement Element_InvoiceLineAdd_Amount = xmlDoc.CreateElement("Amount");
+            //		Element_InvoiceLineAdd.AppendChild(Element_InvoiceLineAdd_Amount).InnerText = lineItem[4];
+            //	}
+            //}
 
 
+            //InvoiceAddRq.SetAttribute("requestID", "99");
+            //requestXML = xmlDoc.OuterXml;
 
-			InvoiceAddRsType resp;
-			QBXMLMsgsRs r = this.Transmit(req, out resp);
+            //return requestXML;
 
-			return r;
+
+
+            QBXMLMsgsRs r = this.Transmit(req, out InvoiceAddRsType resp);
+
+            return r;
 		}
 
 

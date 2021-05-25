@@ -27,7 +27,7 @@ namespace RandREng.Utility.Printer
 
         public void SetDefaultPrinter(string PrinterID)
         {
-            ManagementPath path = new ManagementPath();
+            ManagementPath path = new();
             ManagementBaseObject inParams = null;
             ManagementBaseObject outParams = null;
             path.Server = ".";
@@ -37,7 +37,7 @@ namespace RandREng.Utility.Printer
 
             try
             {
-                ManagementObject mo = new ManagementObject(path);
+                ManagementObject mo = new(path);
                 outParams = mo.InvokeMethod("SetDefaultPrinter", inParams, null);
                 Logger.Log(LogLevel.Information, string.Format("Printer {0} is default now ", PrinterID));
             }
@@ -78,7 +78,7 @@ namespace RandREng.Utility.Printer
             logger.Log(LogLevel.Information, "Available Printers");
             foreach (ManagementObject mo in queryCollection)
             {
-                deviceID = mo["DeviceID"] as string;
+                deviceID = mo[nameof(DeviceID)] as string;
                 logger.Log(LogLevel.Information, deviceID);
             }
             logger.Log(LogLevel.Information, "");
@@ -117,7 +117,7 @@ namespace RandREng.Utility.Printer
         public static bool PrintTiff(string filename, string printer, ILogger logger)
         {
             bool bOK = false;
-            using (Process myProcess = new Process())
+            using (Process myProcess = new())
             {
                 myProcess.StartInfo.FileName = "rundll32.exe";
                 myProcess.StartInfo.Arguments = string.Format("shimgvw.dll,ImageView_PrintTo /pt \"{0}\" \"{1}\"", filename, printer);
@@ -140,9 +140,9 @@ namespace RandREng.Utility.Printer
         public static bool Print(string filename)
         {
             bool bOk = false;
-            using (Process myProcess = new Process())
+            using (Process myProcess = new())
             {
-                ProcessStartInfo startInfo = new ProcessStartInfo(filename)
+                ProcessStartInfo startInfo = new(filename)
                 {
                     Verb = "print"
                 };
@@ -157,7 +157,7 @@ namespace RandREng.Utility.Printer
         public static bool PrintPDF(string filename, string printer, ILogger logger)
         {
             bool bOK = false;
-            using (Process myProcess = new Process())
+            using (Process myProcess = new())
             {
                 string progfiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
                 myProcess.StartInfo.FileName = progfiles + @"\Foxit Software\Foxit Reader\Foxit Reader.exe";
@@ -206,7 +206,7 @@ namespace RandREng.Utility.Printer
 
         static public List<SuEvent> GetPrintedFilesFromEventLog(ILogger Logger)
         {
-            List<SuEvent> alEntry = new List<SuEvent>();
+            List<SuEvent> alEntry = new();
             //try
             //{
             //    string source = "PrintService";

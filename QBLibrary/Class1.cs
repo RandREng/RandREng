@@ -19,7 +19,7 @@ namespace RandREng.QBLibrary
 
 	public class QBProcessor : IQBProcessor
 	{
-		readonly IQBProcessor _processor;
+        private readonly IQBProcessor _processor;
 		public QBProcessor(ILogger logger)
 		{
 //			if (System.Environment.Is64BitProcess)
@@ -293,32 +293,8 @@ namespace RandREng.QBLibrary
 //				return this.rp != null;
 			}
 		}
-		// CONNECTION TO QB
-		private void ConnectToQB()
-		{
-			//if (rp == null)
-			//{
-			//	try
-			//	{
-			//		rp = new RequestProcessor2Class();
-			//		rp.OpenConnection2(AppID, AppName, QBXMLRPConnectionType.localQBD);
-			//		if (CompanyFile == null)
-			//		{
-			//			CompanyFile = string.Empty;
-			//		}
-			//		ticket = rp.BeginSession(CompanyFile, mode);
-			//		string[] versions = (string[])rp.get_QBXMLVersionsForSession(ticket);
-			//		MaxVersion = versions[versions.Length - 1];
-			//	}
-			//	catch (Exception e)
-			//	{
-			//		Logger.LogCritical(e);
-			//		DisconnectFromQB();
-			//	}
-			//}
-		}
 
-		public void DisconnectFromQB()
+        public void DisconnectFromQB()
 		{
 			//if (ticket != null)
 			//{

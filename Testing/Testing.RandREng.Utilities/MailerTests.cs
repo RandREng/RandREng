@@ -48,7 +48,7 @@ namespace Testing.RandREng.Utilities
         [Trait("Category", "Unit")]
         public void MailerDefaults()
         {
-            Mailer mailer = new Mailer(settings.SmtpServer);
+            Mailer mailer = new(settings.SmtpServer);
 
             Assert.Equal(25, mailer.Port);
             Assert.Equal(settings.SmtpServer, mailer.SMTPServer);
@@ -59,7 +59,7 @@ namespace Testing.RandREng.Utilities
         [Trait("Category", "Unit")]
         public void MailerOverrides()
         {
-            Mailer mailer = new Mailer(settings.SmtpServer, 100, true);
+            Mailer mailer = new(settings.SmtpServer, 100, true);
 
             Assert.Equal(100, mailer.Port);
             Assert.Equal(settings.SmtpServer, mailer.SMTPServer);
@@ -70,7 +70,7 @@ namespace Testing.RandREng.Utilities
         [Trait("Category", "Unit")]
         public void MailerOverrides2()
         {
-            Mailer mailer = new Mailer(settings.SmtpServer, useSSL: settings.SmtpUseSsl);
+            Mailer mailer = new(settings.SmtpServer, useSSL: settings.SmtpUseSsl);
 
             Assert.Equal(25, mailer.Port);
             Assert.Equal(settings.SmtpServer, mailer.SMTPServer);
@@ -81,7 +81,7 @@ namespace Testing.RandREng.Utilities
         [Trait("Category", "Integration")]
         public async Task SendMail1()
         {
-            Mailer mailer = new Mailer(settings.SmtpServer, settings.SmtpPort, useSSL: settings.SmtpUseSsl);
+            Mailer mailer = new(settings.SmtpServer, settings.SmtpPort, useSSL: settings.SmtpUseSsl);
 
             string subject = $"Test{Guid.NewGuid()}";
             string body = "Test Body";
@@ -92,7 +92,7 @@ namespace Testing.RandREng.Utilities
             string account = settings.SmtpAccount;
             string password = settings.SmtpPassword;
 
-            List<string> to = new List<string> { settings.ImapAccount };
+            List<string> to = new() { settings.ImapAccount };
 
             (bool ok, string errors) result = await mailer.SendMailAsync(subject, body, highpriority, attachment, to, from, friendly, account, password);
 
@@ -118,9 +118,9 @@ namespace Testing.RandREng.Utilities
             string account = settings.SmtpAccount;
             string password = settings.SmtpPassword;
 
-            List<string> to = new List<string> { settings.ImapAccount };
+            List<string> to = new() { settings.ImapAccount };
 
-            Mailer mailer = new Mailer(settings.SmtpServer, settings.SmtpPort, useSSL: settings.SmtpUseSsl);
+            Mailer mailer = new(settings.SmtpServer, settings.SmtpPort, useSSL: settings.SmtpUseSsl);
             mailer.ToAddresses = to;
             mailer.FromAddress = from;
             mailer.FromFriendlyName = friendly;

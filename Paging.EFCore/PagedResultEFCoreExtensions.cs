@@ -11,7 +11,7 @@ namespace RandREng.Paging.EFCore
     {
         public static async Task<PagedResult<T>> GetPagedAsync<T>(this IQueryable<T> query, int page, int pageSize) where T : class
         {
-            PagedResult<T> result = new PagedResult<T>
+            PagedResult<T> result = new()
             {
                 CurrentPage = page,
                 PageSize = pageSize,
@@ -31,7 +31,7 @@ namespace RandREng.Paging.EFCore
 
         public static async Task<PagedResult<U>> GetPagedAsync<T, U>(this IQueryable<T> query, int page, int pageSize, IConfigurationProvider config) where U : class
         {
-            PagedResult<U> result = new PagedResult<U>
+            PagedResult<U> result = new()
             {
                 CurrentPage = page,
                 PageSize = pageSize,

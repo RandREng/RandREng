@@ -16,8 +16,8 @@ namespace RandREng.Controls
     {
         private bool bAdvanced;
         private Size oldClientSize;
-        private int OldButtonsY;
-        private int OldTextBoxY;
+        private readonly int OldButtonsY;
+        private readonly int OldTextBoxY;
         public static IErrorHelper ErrorHelper { get; set; }
 
         public ErrorForm()
@@ -74,12 +74,12 @@ namespace RandREng.Controls
             Application.ThreadException += new System.Threading.ThreadExceptionEventHandler( Application_ThreadException );
         }
 
-        static void Application_ThreadException( object sender, System.Threading.ThreadExceptionEventArgs e )
+        private static void Application_ThreadException( object sender, System.Threading.ThreadExceptionEventArgs e )
         {
             handleThreadException( sender, e.Exception );
         }
 
-        static void CurrentDomain_UnhandledException( object sender, UnhandledExceptionEventArgs e )
+        private static void CurrentDomain_UnhandledException( object sender, UnhandledExceptionEventArgs e )
         {
             Exception exception = (Exception) e.ExceptionObject;
             handleThreadException( sender, exception );
@@ -129,7 +129,7 @@ namespace RandREng.Controls
                 ex = ex.InnerException;
                 prefix = "[INNER EXCEPTION] ";
             }
-            using (ErrorForm errorForm = new ErrorForm())
+            using (ErrorForm errorForm = new())
             {
                 errorForm.Text = caption;
                 errorForm.ErrorMessage = message;
@@ -139,7 +139,7 @@ namespace RandREng.Controls
 
         public static DialogResult DisplayError(string caption, string message)
         {
-            using (ErrorForm errorForm = new ErrorForm())
+            using (ErrorForm errorForm = new())
             {
                 errorForm.Text = caption;
                 errorForm.ErrorMessage = message;

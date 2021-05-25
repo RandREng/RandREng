@@ -12,7 +12,7 @@ namespace IM.ReportPlugin
 {
     public class ReportPluginInfo : IDisposable
     {
-        private ILogger Logger;
+        private readonly ILogger Logger;
 
         public ReportPluginInfo(ILogger logger)
         {
@@ -38,7 +38,7 @@ namespace IM.ReportPlugin
 
         private bool _IsNew = true;
         private bool _IsDisposed;
-        private static string _Folder = System.AppDomain.CurrentDomain.BaseDirectory + @"plugins\";
+        private static readonly string _Folder = System.AppDomain.CurrentDomain.BaseDirectory + @"plugins\";
 
         [XmlElement("GUID")]
         public string GUID { get; set; }
@@ -129,7 +129,7 @@ namespace IM.ReportPlugin
 
             try
             {
-                List<ReportPluginInfo> plugins = new List<ReportPluginInfo>();
+                List<ReportPluginInfo> plugins = new();
 
                 if (!Directory.Exists(_Folder))
                 {
@@ -218,7 +218,7 @@ namespace IM.ReportPlugin
 
         public static Collection<ReportPluginInfo> LoadAll()
         {
-            Collection<ReportPluginInfo> infos = new Collection<ReportPluginInfo>();
+            Collection<ReportPluginInfo> infos = new();
 
             if (!Directory.Exists(_Folder))
             {
@@ -251,7 +251,7 @@ namespace IM.ReportPlugin
 
             Assembly ass = Assembly.LoadFile(FileName);
 
-            TypeFilter myFilter = new TypeFilter(MyInterfaceFilter);
+            TypeFilter myFilter = new(MyInterfaceFilter);
             
             foreach (Type type in ass.GetTypes())
             {

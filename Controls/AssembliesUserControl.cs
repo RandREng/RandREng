@@ -21,14 +21,14 @@ namespace RandREng.Controls
                 return string.Empty;
             }
             System.Xml.Serialization.XmlSerializer serializer =
-                new System.Xml.Serialization.XmlSerializer(typeof(List<string>));
-            MemoryStream ms = new MemoryStream();
+                new(typeof(List<string>));
+            MemoryStream ms = new();
             serializer.Serialize(ms, this.OrderedAssemblies);
 
             return Encoding.ASCII.GetString(ms.ToArray());       
         }
 
-        private List<string> OrderedAssemblies = new List<string>();
+        private readonly List<string> OrderedAssemblies = new();
         protected override void OnLoad(EventArgs e)
         {
             Assembly[] ourAssemblies = AppDomain.CurrentDomain.GetAssemblies();

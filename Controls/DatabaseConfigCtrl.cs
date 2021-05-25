@@ -49,7 +49,7 @@ namespace RandREng.Controls
             String ActiveDB = "";
             String ActiveName = "";
 
-            XmlDocument doc = new XmlDocument();
+            XmlDocument doc = new();
             if (File.Exists("database.xml"))
             {
                 doc.Load("database.xml");

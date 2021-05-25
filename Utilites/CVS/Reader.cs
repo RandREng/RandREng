@@ -69,7 +69,7 @@ namespace RandREng.Utility.CVS
 
         public Dictionary<string, List<string>> Parse(TextReader sr)
         {
-            Dictionary<string, List<string>> data = new Dictionary<string, List<string>>();
+            Dictionary<string, List<string>> data = new();
             try
             {
                 List<string> header = null;
@@ -114,7 +114,7 @@ namespace RandREng.Utility.CVS
         }
         public Dictionary<string, List<string>> Parse(string fileName)
         {
-            Dictionary<string, List<string>> data = new Dictionary<string, List<string>>();
+            Dictionary<string, List<string>> data = new();
             try
             {
                 // Create an instance of StreamReader to read from a file.
@@ -136,7 +136,7 @@ namespace RandREng.Utility.CVS
         private List<string> parseLine(string line)
         {
             string temp = line;
-            List<string> items = new List<string>();
+            List<string> items = new();
 
             if (temp[0] != Comment)
             {

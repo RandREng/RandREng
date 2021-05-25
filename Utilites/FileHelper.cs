@@ -78,7 +78,7 @@ namespace RandREng.Utility
 
         public static bool MoveFile(string SourceFilename, string DestPath, out string DestFilename)
         {
-            FileInfo file = new FileInfo(SourceFilename);
+            FileInfo file = new(SourceFilename);
             bool bNew = MoveFile(ref file, DestPath);
             DestFilename = file.FullName;
             return bNew;

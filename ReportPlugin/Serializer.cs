@@ -127,23 +127,10 @@ namespace IM.ReportPlugin
       SaveToDocumentFormat(serializableObject, null, fileName, isolatedStorageDirectory);
     }
 
-    #endregion
+        #endregion
+        #region Private
 
-    #region Private
-
-    private static FileStream CreateFileStream(IsolatedStorageFile isolatedStorageFolder, string path)
-    {
-      FileStream fileStream = null;
-
-      if (isolatedStorageFolder == null)
-        fileStream = new FileStream(path, FileMode.OpenOrCreate);
-      else
-        fileStream = new IsolatedStorageFileStream(path, FileMode.OpenOrCreate, isolatedStorageFolder);
-
-      return fileStream;
-    }
-
-    private static T LoadFromDocumentFormat(System.Type[] extraTypes, string path, IsolatedStorageFile isolatedStorageFolder)
+        private static T LoadFromDocumentFormat(System.Type[] extraTypes, string path, IsolatedStorageFile isolatedStorageFolder)
     {
       T serializableObject = null;
 

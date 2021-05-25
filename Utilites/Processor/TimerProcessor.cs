@@ -10,11 +10,11 @@ namespace RandREng.Utility.Processor
 {
     public class TimerProcessor
     {
-        Thread Thread { get; set; }
+        private Thread Thread { get; set; }
         public bool Processing { get; protected set; }
         protected ProcessQueue PQueue { get; set; }
         virtual protected ILogger Logger { get; set; }
-        private System.Timers.Timer m_BaseTimer;
+        private System.Timers.Timer _baseTimer;
         protected int Stagger;
         protected bool SyncOnHour;
         protected int Interval = 60000;
@@ -114,12 +114,12 @@ namespace RandREng.Utility.Processor
                 }
                 Producer(DateTime.Now);
 
-                m_BaseTimer = new System.Timers.Timer
+                _baseTimer = new System.Timers.Timer
                 {
                     Interval = Interval
                 };
-                m_BaseTimer.Elapsed += new System.Timers.ElapsedEventHandler(m_BaseTimer_Elapsed);
-                m_BaseTimer.Enabled = true;
+                _baseTimer.Elapsed += new System.Timers.ElapsedEventHandler(baseTimer_Elapsed);
+                _baseTimer.Enabled = true;
 
                 while (Processing)
                 {
@@ -141,7 +141,7 @@ namespace RandREng.Utility.Processor
             }
         }
 
-        void m_BaseTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        private void baseTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             Producer(e.SignalTime);
         }
@@ -155,38 +155,38 @@ namespace RandREng.Utility.Processor
 
         protected class ProcessQueue
         {
-            readonly object queueLock = new object();
-            readonly Queue queue = new Queue();
+            private readonly object _queueLock = new();
+            private readonly Queue _queue = new();
 
             public void Produce(object o)
             {
-                lock (queueLock)
+                lock (_queueLock)
                 {
-                    queue.Enqueue(o);
-                    if (queue.Count == 1)
+                    _queue.Enqueue(o);
+                    if (_queue.Count == 1)
                     {
-                        Monitor.Pulse(queueLock);
+                        Monitor.Pulse(_queueLock);
                     }
                 }
             }
 
             public object Consume()
             {
-                lock (queueLock)
+                lock (_queueLock)
                 {
-                    while (queue.Count == 0)
+                    while (_queue.Count == 0)
                     {
-                        Monitor.Wait(queueLock);
+                        Monitor.Wait(_queueLock);
                     }
-                    return queue.Dequeue();
+                    return _queue.Dequeue();
                 }
             }
 
             public int Count()
             {
-                lock (queueLock)
+                lock (_queueLock)
                 {
-                    return queue.Count;
+                    return _queue.Count;
                 }
             }
         }

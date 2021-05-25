@@ -8,10 +8,8 @@ namespace ReportServerBarcode
 {
     public class QRCode
 	{
-		private const BarcodeFormat DEFAULT_BARCODE_FORMAT = BarcodeFormat.QR_CODE;
-		private static readonly ImageFormat DEFAULT_IMAGE_FORMAT = ImageFormat.Png;
-		private const String DEFAULT_OUTPUT_FILE = "out";
-		private const int DEFAULT_WIDTH = 96;
+        private static readonly ImageFormat DEFAULT_IMAGE_FORMAT = ImageFormat.Png;
+        private const int DEFAULT_WIDTH = 96;
 		private const int DEFAULT_HEIGHT = 96;
 
 		static public byte[] Encode(string content)
@@ -22,7 +20,7 @@ namespace ReportServerBarcode
 		static public byte[] Encode(string content, ImageFormat imageFormat, int width, int height)
 		{
 			byte[] bytes = null;
-			using (MemoryStream stream = new MemoryStream())
+			using (MemoryStream stream = new())
 			{
 				Encode(stream, content, imageFormat, width, height, 0);
 				bytes = stream.ToArray();
@@ -35,7 +33,7 @@ namespace ReportServerBarcode
 		{
 			string fileName = "";
 			fileName = Path.GetTempFileName();
-			using (FileStream stream = new FileStream(fileName, FileMode.Create))
+			using (FileStream stream = new(fileName, FileMode.Create))
 			{
 				Encode(stream, content, imageFormat, width, height, 0);
 			}
@@ -45,8 +43,8 @@ namespace ReportServerBarcode
 
 		static public void Encode(Stream stream, string contents, ImageFormat imageFormat, int width, int height, int margin)
 		{
-			BarcodeWriterPixelData barcodeWriter = new BarcodeWriterPixelData
-			{
+			BarcodeWriterPixelData barcodeWriter = new()
+            {
 				Format = BarcodeFormat.QR_CODE,
 				Options = new QrCodeEncodingOptions
 				{
@@ -60,7 +58,7 @@ namespace ReportServerBarcode
             ZXing.Rendering.PixelData pixelData = barcodeWriter.Write(contents);
 			// creating a bitmap from the raw pixel data; if only black and white colors are used it makes no difference
 			// that the pixel data ist BGRA oriented and the bitmap is initialized with RGB
-			using (System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(pixelData.Width, pixelData.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb))
+			using (System.Drawing.Bitmap bitmap = new(pixelData.Width, pixelData.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb))
 			{
                 BitmapData bitmapData = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, pixelData.Width, pixelData.Height),
 				System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppRgb);

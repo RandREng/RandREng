@@ -189,6 +189,7 @@ namespace RandREng.Utility.Mail
                     try
                     {
                         message.From = new MailAddress(From, DisplayName);
+                        message.ReplyToList.Add(message.From);
                     }
                     catch (Exception e)
                     {

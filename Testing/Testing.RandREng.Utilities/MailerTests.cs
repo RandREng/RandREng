@@ -20,11 +20,13 @@ namespace Testing.RandREng.Utilities
             public bool SmtpUseSsl { get; set; }
             public string SmtpAccount { get; set; }
             public string SmtpPassword { get; set; }
+            public string SmtpFrom { get; set; }
             public string ImapServer { get; set; }
             public int ImapPort { get; set; } = 993;
             public bool ImapUseSsl { get; set; }
             public string ImapAccount { get; set; }
             public string ImapPassword { get; set; }
+            public string ImapTo { get; set; }
         }
 
         private IConfiguration configuration { get; set; }
@@ -87,12 +89,12 @@ namespace Testing.RandREng.Utilities
             string body = "Test Body";
             bool highpriority = false;
             string attachment = null;
-            string from = settings.SmtpAccount;
+            string from = settings.SmtpFrom;
             string friendly = "fred";
             string account = settings.SmtpAccount;
             string password = settings.SmtpPassword;
 
-            List<string> to = new() { settings.ImapAccount };
+            List<string> to = new() { settings.ImapTo };
 
             (bool ok, string errors) result = await mailer.SendMailAsync(subject, body, highpriority, attachment, to, from, friendly, account, password);
 
@@ -113,12 +115,12 @@ namespace Testing.RandREng.Utilities
             string body = "Test Body";
             bool highpriority = false;
             string attachment = null;
-            string from = settings.SmtpAccount;
+            string from = settings.SmtpFrom;
             string friendly = "fred";
             string account = settings.SmtpAccount;
             string password = settings.SmtpPassword;
 
-            List<string> to = new() { settings.ImapAccount };
+            List<string> to = new() { settings.ImapTo };
 
             Mailer mailer = new(settings.SmtpServer, settings.SmtpPort, useSSL: settings.SmtpUseSsl);
             mailer.ToAddresses = to;
@@ -138,14 +140,20 @@ namespace Testing.RandREng.Utilities
             Assert.Equal(body, message.TextBody.Trim());
 
         }
+        [Fact]
+        [Trait("Category", "Integration")]
+        public async Task GetMailTest()
+        {
+            MimeMessage message = await GetMail("");
+        }
 
         private async Task<MimeMessage> GetMail(string subject, int maxDelay = 20)
         {
             MimeMessage message = null;
             using (var client = new ImapClient())
             {
-                await client.ConnectAsync("outlook.office365.com", 993, true);
-                await client.AuthenticateAsync("noreply@randreng.com", "Imap12345");
+                await client.ConnectAsync(settings.ImapServer, settings.ImapPort, settings.ImapUseSsl);
+                await client.AuthenticateAsync(settings.ImapAccount, settings.ImapPassword);
                 DateTime start = DateTime.Now;
 
                 while ((null == message) && ((DateTime.Now - start).TotalSeconds < maxDelay))

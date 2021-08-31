@@ -74,12 +74,16 @@ namespace RandREng.Utility.Processor
             }
         }
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         virtual protected async Task InitAsync()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
 //            WriteEventLog("Initializing Processor...");
         }
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         virtual protected async Task Consumer(object o)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
         }
 
@@ -106,7 +110,7 @@ namespace RandREng.Utility.Processor
                 }
                 delay += this.Stagger;
 #endif
-                Logger.Log(LogLevel.Information, string.Format("Processor starting delay: {0}.", delay));
+                Logger.Log(LogLevel.Information, "Processor starting delay:", delay);
 
                 if (delay > 0)
                 {

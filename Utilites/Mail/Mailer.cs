@@ -15,7 +15,7 @@ namespace RandREng.Utility.Mail
 {
     public class Mailer
     {
-        private readonly ILogger Logger;
+        private readonly ILogger _logger;
 
         public enum EnEmailAddressStatusCode { Valid, Blank, IncorrectFormat };
 
@@ -28,65 +28,65 @@ namespace RandREng.Utility.Mail
         public string FromAddress { get; set; }
         public string FromFriendlyName { get; set; }
 
-        private List<string> toAddresses;
+        private List<string> _toAddresses;
         public List<string> ToAddresses
         {
             get
             {
-                if (toAddresses == null)
+                if (_toAddresses == null)
                 {
-                    toAddresses = new List<string>();
+                    _toAddresses = new List<string>();
                 }
-                return toAddresses;
+                return _toAddresses;
             }
 
             set
             {
-                toAddresses = value;
+                _toAddresses = value;
             }
         }
 
-        private List<string> ccAddresses;
+        private List<string> _ccAddresses;
         public List<string> CCAddresses
         {
             get
             {
-                if (ccAddresses == null)
+                if (_ccAddresses == null)
                 {
-                    ccAddresses = new List<string>();
+                    _ccAddresses = new List<string>();
                 }
-                return ccAddresses;
+                return _ccAddresses;
             }
 
             set
             {
-                ccAddresses = value;
+                _ccAddresses = value;
             }
         }
 
         public bool BodyIsHtml { get; set; }
-        private SmtpClient client;
-        private SmtpClient Client
+        private SmtpClient _client;
+        public SmtpClient Client
         {
             get
             {
-                if (client == null)
+                if (_client == null)
                 {
                     if (!string.IsNullOrEmpty(SMTPServer))
                     {
-                        client = new SmtpClient(SMTPServer, Port)
+                        _client = new SmtpClient(SMTPServer, Port)
                         {
                             DeliveryMethod = SmtpDeliveryMethod.Network,
                             EnableSsl = UseSSL
                         };
                     }
                 }
-                return client;
+                return _client;
             }
 
             set
             {
-                client = value;
+                _client = value;
             }
         }
 
@@ -101,13 +101,13 @@ namespace RandREng.Utility.Mail
             string ToAddress = RandREng.Utility.AppSettings.AppSettings.GetAppSetting("ToAddress", "");
             if (IsValidEmail(ToAddress))
             {
-                Logger.Log(LogLevel.Debug, string.Format("Adding address: {0}", ToAddress));
+                _logger.Log(LogLevel.Debug, string.Format("Adding address: {0}", ToAddress));
                 ToAddresses.Add(ToAddress);
             }
             FromAddress = RandREng.Utility.AppSettings.AppSettings.GetAppSetting("FromAddress", "");
             FromFriendlyName = RandREng.Utility.AppSettings.AppSettings.GetAppSetting("FromFriendlyName", "");
 
-            Logger = logger;
+            _logger = logger;
             BodyIsHtml = false;
         }
 
@@ -121,7 +121,7 @@ namespace RandREng.Utility.Mail
             BodyIsHtml = false;
             Port = port;
             UseSSL = useSSL;
-            Logger = logger;
+            _logger = logger;
         }
 
         public async Task<(bool, string)> SendMailAsync(string Subject, string Body)
@@ -144,11 +144,11 @@ namespace RandREng.Utility.Mail
             if (string.IsNullOrWhiteSpace(To))
             {
                 string error = $"Cannot add an empty To address to email with subject: {Subject}"; 
-                Logger.Log(LogLevel.Error, error);
+                _logger.Log(LogLevel.Error, error);
                 return (false, error);
             }
             ToAddresses.Clear();  // need to clear any existing addresses that may have been added
-            Logger.Log(LogLevel.Debug, string.Format("Adding address: {0}", To));
+            _logger.Log(LogLevel.Debug, string.Format("Adding address: {0}", To));
             ToAddresses.Add(To);
             return await SendMailAsync(Subject, Body, HighPriority, Attachment, ToAddresses, From, DisplayName, AuthAccount, AuthPasswrd);
         }
@@ -162,7 +162,7 @@ namespace RandREng.Utility.Mail
         {
             if (string.IsNullOrWhiteSpace(To))
             {
-                Logger.Log(LogLevel.Error, string.Format("Cannot add an empty To address to email with subject: {0}", Subject));
+                _logger.Log(LogLevel.Error, string.Format("Cannot add an empty To address to email with subject: {0}", Subject));
                 return (false, "Null to");
             }
             ToAddresses.Clear();  // need to clear any existing addresses that may have been added
@@ -194,8 +194,8 @@ namespace RandREng.Utility.Mail
                     catch (Exception e)
                     {
                         errors = $"From - {From}";
-                        Logger.LogCritical(e);
-                        Logger.LogError(errors);
+                        _logger.LogCritical(e);
+                        _logger.LogError(errors);
                         return (false, errors);
                     }
 
@@ -210,8 +210,8 @@ namespace RandREng.Utility.Mail
                             errors += Environment.NewLine;
                         }
                         errors += e.Message;
-                        Logger.LogCritical(e);
-                        Logger.LogError(string.Format("ReplyTo - {0}", From));
+                        _logger.LogCritical(e);
+                        _logger.LogError(string.Format("ReplyTo - {0}", From));
                         return (false, errors);
                     }
                     message.Body = Body;
@@ -231,14 +231,14 @@ namespace RandREng.Utility.Mail
                                     errors += Environment.NewLine;
                                 }
                                 errors += e.Message;
-                                Logger.LogCritical(e);
-                                Logger.LogError(string.Format("CC - {0}", ToAddress));
+                                _logger.LogCritical(e);
+                                _logger.LogError(string.Format("CC - {0}", ToAddress));
                                 return (false, errors);
                             }
                         }
                         else
                         {
-                            Logger.LogError(string.Format("Found an empty ToAddress when sending an email with the subject: '{0}", Subject));
+                            _logger.LogError(string.Format("Found an empty ToAddress when sending an email with the subject: '{0}", Subject));
                         }
 
                     }
@@ -259,14 +259,14 @@ namespace RandREng.Utility.Mail
                                     errors += Environment.NewLine;
                                 }
                                 errors += e.Message;
-                                Logger.LogCritical(e);
-                                Logger.LogError(string.Format("CC - {0}", CCAddress));
+                                _logger.LogCritical(e);
+                                _logger.LogError(string.Format("CC - {0}", CCAddress));
                                 return (false, errors);
                             }
                         }
                         else
                         {
-                            Logger.LogError(string.Format("Found an empty CCAddress when sending an email with the subject: '{0}", Subject));
+                            _logger.LogError(string.Format("Found an empty CCAddress when sending an email with the subject: '{0}", Subject));
                         }
 
                     }
@@ -292,24 +292,24 @@ namespace RandREng.Utility.Mail
                             error += adr + " - ";
                         }
                         error += string.Format(" From {0} - DispalyName {1} - Account {2} - Password {3}", From, DisplayName, Account, Password);
-                        Logger.LogError(error);
+                        _logger.LogError(error);
                         if (!string.IsNullOrEmpty(errors))
                         {
                             errors += Environment.NewLine;
                         }
                         errors += ex.Message;
-                        Logger.LogCritical(ex);
+                        _logger.LogCritical(ex);
                     }
                 }
                 else
                 {
                     errors = "SendMail() - ToAddress, FromAddress, or SMTPServer name was empty.";
-                    Logger.Log(LogLevel.Error, errors);
+                    _logger.Log(LogLevel.Error, errors);
                 }
             }
             catch (Exception e)
             {
-                Logger.LogCritical(e);
+                _logger.LogCritical(e);
             }
             return (retVal,errors);
         }
@@ -327,9 +327,9 @@ namespace RandREng.Utility.Mail
             }
             catch (Exception e)
             {
-                Logger.LogError(message.ToString());
+                _logger.LogError(message.ToString());
                 error += e.Message;
-                Logger.LogCritical(e);
+                _logger.LogCritical(e);
             }
             return (retVal, error);
         }
@@ -350,7 +350,7 @@ namespace RandREng.Utility.Mail
             }
 
             // Use IdnMapping class to convert Unicode domain names.
-            emailAddress = Regex.Replace(emailAddress, @"(@)(.+)$", DomainMapper);
+            emailAddress = Regex.Replace(emailAddress, @"(@)(.+)$", domainMapper);
 
             if (string.IsNullOrEmpty(emailAddress))
             {
@@ -372,7 +372,7 @@ namespace RandREng.Utility.Mail
             return valid;
         }
 
-        private static string DomainMapper(Match match)
+        private static string domainMapper(Match match)
         {
 
             // IdnMapping class with default property values.

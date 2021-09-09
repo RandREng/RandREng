@@ -9,7 +9,7 @@ namespace RandREng.Utility.Documents
 	public class MTiffDocument : IDocument
 	{
         //		TiffBitmapEncoder encoder;
-        private Stream imageStreamSource;
+        private Stream _imageStreamSource;
 //		TiffBitmapDecoder decoder;
 
 		/// <summary>
@@ -23,20 +23,20 @@ namespace RandREng.Utility.Documents
 
 		~MTiffDocument()
 		{
-			if (imageStreamSource != null)
+			if (_imageStreamSource != null)
 			{
-				imageStreamSource.Dispose();
-				imageStreamSource = null;
+				_imageStreamSource.Dispose();
+				_imageStreamSource = null;
 			}
 		}
 
 		public void Open(string fileName)
 		{
-			imageStreamSource = new MemoryStream();
+			_imageStreamSource = new MemoryStream();
 			Bitmap b = new(fileName);
-			b.Save(imageStreamSource, ImageFormat.Tiff);
+			b.Save(_imageStreamSource, ImageFormat.Tiff);
 			b.Dispose();
-			imageStreamSource.Seek(0, SeekOrigin.Begin);
+			_imageStreamSource.Seek(0, SeekOrigin.Begin);
 //			decoder = new TiffBitmapDecoder(imageStreamSource, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnDemand);
 		}
 
@@ -61,7 +61,7 @@ namespace RandREng.Utility.Documents
 		}
 
 
-		static public void Split(string fileName)
+		public static void Split(string fileName)
 		{
 			//using (Stream imageStreamSource = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
 			//{

@@ -18,11 +18,11 @@ namespace RandREng.Utility.Printer
         public string PrinterPort { get; set; }
         public string DeviceID { get; set; }
 
-        private readonly ILogger Logger;
+        private readonly ILogger _logger;
 
         public PrinterHelper(ILogger logger)
         {
-            Logger = logger;
+            _logger = logger;
         }
 
         public void SetDefaultPrinter(string PrinterID)
@@ -39,11 +39,11 @@ namespace RandREng.Utility.Printer
             {
                 ManagementObject mo = new(path);
                 outParams = mo.InvokeMethod("SetDefaultPrinter", inParams, null);
-                Logger.Log(LogLevel.Information, string.Format("Printer {0} is default now ", PrinterID));
+                _logger.Log(LogLevel.Information, string.Format("Printer {0} is default now ", PrinterID));
             }
             catch (Exception e)
             {
-                Logger.Log(LogLevel.Information, "SetDefaultPrinter() - " + e.Message);
+                _logger.Log(LogLevel.Information, "SetDefaultPrinter() - " + e.Message);
             }
         }
 
@@ -108,7 +108,7 @@ namespace RandREng.Utility.Printer
                     PrinterPort = mo["PortName"] as string;
                     Success = true;
                 }
-                Logger.Log(string.Format("GetPrinterInfo: Name={0}, Driver={1}, Port={2}", mo["Name"].ToString(), mo["DriverName"].ToString(), mo["PortName"].ToString()));
+                _logger.Log(string.Format("GetPrinterInfo: Name={0}, Driver={1}, Port={2}", mo["Name"].ToString(), mo["DriverName"].ToString(), mo["PortName"].ToString()));
             }
 
             return Success;
@@ -184,11 +184,11 @@ namespace RandREng.Utility.Printer
             if (GetPrinterInfo(RequestedPrinterName))
             {
                 this.RequestedPrinterName = RequestedPrinterName;
-                Logger.Log(LogLevel.Information, string.Format("PO Printer set to: Name={0}, Driver={1}, Port={2}", PrinterName, PrinterDriver, PrinterPort));
+                _logger.Log(LogLevel.Information, string.Format("PO Printer set to: Name={0}, Driver={1}, Port={2}", PrinterName, PrinterDriver, PrinterPort));
             }
             else
             {
-                Logger.Log(LogLevel.Information, "PO Printer will use the default printer.");
+                _logger.Log(LogLevel.Information, "PO Printer will use the default printer.");
             }
         }
 
@@ -204,7 +204,7 @@ namespace RandREng.Utility.Printer
             }
         };
 
-        static public List<SuEvent> GetPrintedFilesFromEventLog(ILogger Logger)
+        public static List<SuEvent> GetPrintedFilesFromEventLog(ILogger Logger)
         {
             List<SuEvent> alEntry = new();
             //try

@@ -7,7 +7,7 @@ namespace RandREng.Paging
 {
     public static partial class PagedResultExtensions
     {
-        static public MapperConfiguration Config {set;get;}
+        public static MapperConfiguration Config {set;get;}
 
         public static PagedResult<T> GetPaged<T>(this IQueryable<T> query, int page, int pageSize) where T : class
         {

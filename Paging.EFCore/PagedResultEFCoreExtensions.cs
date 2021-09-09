@@ -9,7 +9,7 @@ namespace RandREng.Paging.EFCore
 {
     public static class PagedResultEFCoreExtensions 
     {
-        public static async Task<PagedResult<T>> GetPagedAsync<T>(this IQueryable<T> query, int page, int pageSize) where T : class
+        public async static Task<PagedResult<T>> GetPagedAsync<T>(this IQueryable<T> query, int page, int pageSize) where T : class
         {
             PagedResult<T> result = new()
             {
@@ -29,7 +29,7 @@ namespace RandREng.Paging.EFCore
             return result;
         }
 
-        public static async Task<PagedResult<U>> GetPagedAsync<T, U>(this IQueryable<T> query, int page, int pageSize, IConfigurationProvider config) where U : class
+        public async static Task<PagedResult<U>> GetPagedAsync<T, U>(this IQueryable<T> query, int page, int pageSize, IConfigurationProvider config) where U : class
         {
             PagedResult<U> result = new()
             {

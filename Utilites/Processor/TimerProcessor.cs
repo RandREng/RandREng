@@ -13,7 +13,7 @@ namespace RandREng.Utility.Processor
         private Thread Thread { get; set; }
         public bool Processing { get; protected set; }
         protected ProcessQueue PQueue { get; set; }
-        virtual protected ILogger Logger { get; set; }
+        protected virtual ILogger Logger { get; set; }
         private System.Timers.Timer _baseTimer;
         protected int Stagger;
         protected bool SyncOnHour;
@@ -75,19 +75,19 @@ namespace RandREng.Utility.Processor
         }
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        virtual protected async Task InitAsync()
+        protected async virtual Task InitAsync()
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
 //            WriteEventLog("Initializing Processor...");
         }
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        virtual protected async Task Consumer(object o)
+        protected async virtual Task Consumer(object o)
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
         }
 
-        virtual protected void Producer(DateTime timestamp)
+        protected virtual void Producer(DateTime timestamp)
         {
             PQueue.Produce(timestamp);
         }

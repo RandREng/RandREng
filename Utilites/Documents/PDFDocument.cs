@@ -37,7 +37,7 @@ namespace RandREng.Utility.Documents
 			NotOpen
 		}
 
-		private Mode mode = Mode.NotOpen;
+		private Mode _mode = Mode.NotOpen;
 
 		public void Add(Bitmap bm)
 		{
@@ -135,18 +135,18 @@ namespace RandREng.Utility.Documents
 			pdfDoc.Close();
 		}
 		
-		private PdfDocument pdfDoc;
+		private PdfDocument _pdfDoc;
 
         public void Open(string fileName)
 		{
-			pdfDoc = new PdfDocument(new PdfReader(fileName));
+			_pdfDoc = new PdfDocument(new PdfReader(fileName));
 			//reader = new PdfReader(fileName);
 			//parser = new PdfReaderContentParser(reader);
 			//listener = new MyImageRenderListener();
 
 		}
 
-		public int Count { get { return pdfDoc.GetNumberOfPages(); } }
+		public int Count { get { return _pdfDoc.GetNumberOfPages(); } }
 
 		public Bitmap GetImage(int index)
 		{
@@ -155,7 +155,7 @@ namespace RandREng.Utility.Documents
 			PdfCanvasProcessor parser = new(listener);
 			//            for (int i = 1; i <= pdfDoc.GetNumberOfPages(); i++)
 			//            {
-			parser.ProcessPageContent(pdfDoc.GetPage(index));
+			parser.ProcessPageContent(_pdfDoc.GetPage(index));
 			//            }
 
 			if (stream.Length > 0)
@@ -171,22 +171,22 @@ namespace RandREng.Utility.Documents
 
 		public void Close()
 		{
-			if (this.document != null)
+			if (this._document != null)
 			{
-				this.document.Close();
-				this.document = null;
+				this._document.Close();
+				this._document = null;
 			}
-			if (this.pdfDoc != null)
+			if (this._pdfDoc != null)
 			{
-				this.pdfDoc.Close();
+				this._pdfDoc.Close();
 			}
 		}
 
-        private Document document;
+        private Document _document;
 
         public void Add(Bitmap bm, RotateFlipType rotate)
 		{
-			if (mode == Mode.NotOpen)
+			if (_mode == Mode.NotOpen)
 			{
 				//stream = new FileStream(FileName, FileMode.Create);
 				//pdfDocument = new Document(PageSize.LETTER, PAGE_LEFT_MARGIN, PAGE_RIGHT_MARGIN, PAGE_TOP_MARGIN, PAGE_BOTTOM_MARGIN);
@@ -194,10 +194,10 @@ namespace RandREng.Utility.Documents
 				//pdfDocument.Open();
 
 				PdfWriter writer = new(FileName);
-				pdfDoc = new PdfDocument(writer);
-				document = new Document(pdfDoc, PageSize.LETTER);
-				document.SetMargins(PAGE_TOP_MARGIN, PAGE_RIGHT_MARGIN, PAGE_BOTTOM_MARGIN, PAGE_LEFT_MARGIN);
-				mode = Mode.Write;
+				_pdfDoc = new PdfDocument(writer);
+				_document = new Document(_pdfDoc, PageSize.LETTER);
+				_document.SetMargins(PAGE_TOP_MARGIN, PAGE_RIGHT_MARGIN, PAGE_BOTTOM_MARGIN, PAGE_LEFT_MARGIN);
+				_mode = Mode.Write;
 			}
 
 			Bitmap image = bm;
@@ -214,7 +214,7 @@ namespace RandREng.Utility.Documents
 			   .CreateJpeg(ms.GetBuffer()))
 			   .SetTextAlignment(TextAlignment.CENTER)
 				.ScaleToFit(PageSize.LETTER.GetWidth() - (PAGE_LEFT_MARGIN + PAGE_RIGHT_MARGIN), PageSize.LETTER.GetHeight() - (PAGE_TOP_MARGIN + PAGE_BOTTOM_MARGIN));
-			document.Add(img);
+			_document.Add(img);
 		}
 
 

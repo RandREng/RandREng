@@ -31,7 +31,7 @@ namespace RandREng.Utility.Assembly
             return buildDateTime;
         }
 
-        static public string GetCopyright()
+        public static string GetCopyright()
         {
             System.Reflection.Assembly asm = System.Reflection.Assembly.GetEntryAssembly();
             object[] obj = asm.GetCustomAttributes(false);
@@ -45,7 +45,7 @@ namespace RandREng.Utility.Assembly
             return string.Empty;
         }
 
-        static public string GetInfo()
+        public static string GetInfo()
         {
             string list = "";
             System.Version v = System.Reflection.Assembly.GetEntryAssembly().GetName().Version;

@@ -12,12 +12,12 @@ namespace ReportServerBarcode
         private const int DEFAULT_WIDTH = 96;
 		private const int DEFAULT_HEIGHT = 96;
 
-		static public byte[] Encode(string content)
+		public static byte[] Encode(string content)
 		{
 			return Encode(content, DEFAULT_IMAGE_FORMAT, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		}
 
-		static public byte[] Encode(string content, ImageFormat imageFormat, int width, int height)
+		public static byte[] Encode(string content, ImageFormat imageFormat, int width, int height)
 		{
 			byte[] bytes = null;
 			using (MemoryStream stream = new())
@@ -29,7 +29,7 @@ namespace ReportServerBarcode
 			return bytes;
 		}
 
-		static public string AutoGenerateTempfile(string content, ImageFormat imageFormat, int width, int height)
+		public static string AutoGenerateTempfile(string content, ImageFormat imageFormat, int width, int height)
 		{
 			string fileName = "";
 			fileName = Path.GetTempFileName();
@@ -41,7 +41,7 @@ namespace ReportServerBarcode
 		}
 
 
-		static public void Encode(Stream stream, string contents, ImageFormat imageFormat, int width, int height, int margin)
+		public static void Encode(Stream stream, string contents, ImageFormat imageFormat, int width, int height, int margin)
 		{
 			BarcodeWriterPixelData barcodeWriter = new()
             {

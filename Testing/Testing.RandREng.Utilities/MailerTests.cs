@@ -150,7 +150,7 @@ namespace Testing.RandREng.Utilities
         private async Task<MimeMessage> GetMail(string subject, int maxDelay = 20)
         {
             MimeMessage message = null;
-            using (var client = new ImapClient())
+            using (ImapClient client = new())
             {
                 await client.ConnectAsync(settings.ImapServer, settings.ImapPort, settings.ImapUseSsl);
                 await client.AuthenticateAsync(settings.ImapAccount, settings.ImapPassword);

@@ -129,8 +129,8 @@ namespace RandREng.Utility.Documents
 			iText.Kernel.Geom.Rectangle rect = page.GetPageSize();
 			float x = rect.GetWidth() - 98;
 			float y = rect.GetHeight() - 98;
-			new PdfCanvas(page.NewContentStreamAfter(), pdfDoc.GetFirstPage().GetResources(), pdfDoc)
-					.AddImage(img, x, y, false);
+            new PdfCanvas(page.NewContentStreamAfter(), pdfDoc.GetFirstPage().GetResources(), pdfDoc)
+                .AddImageAt(img, x, y, false);
 
 			pdfDoc.Close();
 		}

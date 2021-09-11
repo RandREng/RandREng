@@ -179,7 +179,7 @@ namespace Testing.RandREng.Utilities
                             }
                         }
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                     }
                 }

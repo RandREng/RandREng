@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <Reference Include="Interop.QBXMLRP2">
-      <HintPath>..\..\ThirdPartyLibraries\Quickbooks\Interop.QBXMLRP2.dll</HintPath>
+      <HintPath>.\Interop.QBXMLRP2.dll</HintPath>
     </Reference>
   </ItemGroup>
 
